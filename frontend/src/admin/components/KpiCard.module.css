@@ -1,0 +1,13 @@
+.card { background: #161B22; border: 1px solid #30363D; border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+.card:hover { border-color: #444C56; }
+.card::after { content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%; border-radius: 0 12px 12px 0; }
+.c_teal::after  { background: #1D9E75; }
+.c_amber::after { background: #EF9F27; }
+.c_blue::after  { background: #378ADD; }
+.c_green::after { background: #639922; }
+.label  { font-size: 11px; color: #8B949E; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.value  { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: #E6EDF3; margin-bottom: 6px; }
+.change { font-size: 12px; }
+.up   { color: #9FE1CB; }
+.down { color: #E24B4A; }
+.sub  { font-size: 11px; color: #484F58; margin-top: 2px; }

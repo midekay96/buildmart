@@ -1,0 +1,95 @@
+.hero {
+  background: linear-gradient(135deg, var(--t900) 0%, var(--t800) 40%, var(--t600) 100%);
+  padding: 3.5rem 2rem 3rem;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--t200);
+  margin-bottom: 10px;
+}
+
+.title {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.title span {
+  color: var(--t100);
+}
+
+.sub {
+  font-size: 15px;
+  color: var(--t100);
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  background: var(--t200);
+  color: var(--t900);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btnPrimary:hover {
+  background: var(--t100);
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background: transparent;
+  color: var(--t100);
+  border: 1.5px solid var(--t400);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btnSecondary:hover {
+  border-color: var(--t200);
+  color: white;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.12);
+}
+
+.statNum {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--t200);
+  margin-top: 2px;
+}

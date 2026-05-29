@@ -1,0 +1,6 @@
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.delivered, .active, .verified, .success { background: rgba(29,158,117,0.15); color: #9FE1CB; }
+.transit, .lowstock { background: rgba(239,159,39,0.15); color: #EF9F27; }
+.processing { background: rgba(55,138,221,0.15); color: #7BB8F0; }
+.pending, .disputed { background: rgba(226,75,74,0.15); color: #F08080; }
+.suspended { background: rgba(100,100,100,0.15); color: #8B949E; }
