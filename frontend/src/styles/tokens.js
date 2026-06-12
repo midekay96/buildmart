@@ -80,21 +80,21 @@ const tokens = {
 
     // ─── Semantic Colors ───
     success: {
-      default: '#10b981',
-      bg: 'rgba(16,185,129,0.1)',
-      border: 'rgba(16,185,129,0.3)',
+      default: '#059669',
+      bg: 'rgba(5,150,105,0.1)',
+      border: 'rgba(5,150,105,0.3)',
     },
 
     warning: {
-      default: '#f59e0b',
-      bg: 'rgba(245,158,11,0.1)',
-      border: 'rgba(245,158,11,0.3)',
+      default: '#d97706',
+      bg: 'rgba(217,119,6,0.1)',
+      border: 'rgba(217,119,6,0.3)',
     },
 
     danger: {
-      default: '#ef4444',
-      bg: 'rgba(239,68,68,0.1)',
-      border: 'rgba(239,68,68,0.3)',
+      default: '#dc2626',
+      bg: 'rgba(220,38,38,0.1)',
+      border: 'rgba(220,38,38,0.3)',
     },
 
     info: {
