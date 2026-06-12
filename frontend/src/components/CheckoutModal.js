@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styles from './CheckoutModal.module.css';
+import { initiatePayment, verifyPayment, placeOrder } from '../services/api';
+
+const IS_LIVE = Boolean(process.env.REACT_APP_API_URL);
 
 const STEPS = ['Delivery', 'Payment', 'Confirm'];
 
@@ -8,9 +11,14 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
   const [payMethod, setPayMethod] = useState('card');
   const [cardForm, setCardForm] = useState({ name: '', number: '', expiry: '', cvv: '' });
   const [transferDone, setTransferDone] = useState(false);
-  const [delivery, setDelivery] = useState({ name: '', phone: '', address: '', state: 'Lagos', note: '' });
-  const [loading, setLoading] = useState(false);
-  const [paid, setPaid] = useState(false);
+  const [delivery,      setDelivery]      = useState({ name: '', phone: '', address: '', state: 'Lagos', note: '' });
+  const [deliveryOpt,   setDeliveryOpt]   = useState('standard');
+  const [loading,       setLoading]       = useState(false);
+  const [paid,          setPaid]          = useState(false);
+  const [refundAck,     setRefundAck]     = useState(false);
+
+  const deliveryFee    = deliveryOpt === 'express' ? 15000 : 5000;
+  const totalAmount    = grand + deliveryFee;
 
   const setCard = (k, v) => setCardForm(p => ({ ...p, [k]: v }));
   const setDel  = (k, v) => setDelivery(p => ({ ...p, [k]: v }));
@@ -21,9 +29,68 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
     return d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     setLoading(true);
-    setTimeout(() => { setLoading(false); setPaid(true); }, 2200);
+    try {
+      if (IS_LIVE) {
+        // ── LIVE: use Paystack ────────────────────────────────────────────
+        const initRes = await initiatePayment({
+          amount:   totalAmount,
+          email:    delivery.email || `customer_${Date.now()}@buildmart.ng`,
+          metadata: {
+            customerName: delivery.name,
+            deliveryAddress: delivery.address,
+            deliveryState: delivery.state,
+            deliveryOption: deliveryOpt,
+          }
+        });
+
+        if (!initRes.success) throw new Error('Payment initiation failed');
+
+        // Load Paystack inline handler
+        const PaystackPop = window.PaystackPop;
+        if (!PaystackPop) {
+          throw new Error('Paystack not loaded. Check your internet connection.');
+        }
+
+        const handler = PaystackPop.setup({
+          key:       process.env.REACT_APP_PAYSTACK_PUBLIC_KEY,
+          email:     delivery.email || `customer@buildmart.ng`,
+          amount:    totalAmount * 100,  // kobo
+          currency:  'NGN',
+          ref:       initRes.reference,
+          onSuccess: async (txn) => {
+            const vRes = await verifyPayment(txn.reference);
+            if (vRes.paid) {
+              await placeOrder({
+                items:             cart,
+                delivery,
+                deliveryOption:    deliveryOpt,
+                total:             totalAmount,
+                paymentReference:  txn.reference
+              });
+              setLoading(false);
+              setPaid(true);
+            } else {
+              setLoading(false);
+              alert('Payment verification failed. Please contact support.');
+            }
+          },
+          onCancel: () => {
+            setLoading(false);
+          }
+        });
+        handler.openIframe();
+      } else {
+        // ── MOCK: simulate 2 second payment ──────────────────────────────
+        await placeOrder({ items: cart, delivery, deliveryOption: deliveryOpt, total: totalAmount });
+        setTimeout(() => { setLoading(false); setPaid(true); }, 2200);
+      }
+    } catch (err) {
+      console.error('Payment error:', err);
+      setLoading(false);
+      alert(err.message || 'Payment failed. Please try again.');
+    }
   };
 
   if (paid) {
@@ -35,7 +102,7 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
             <h2 className={styles.successTitle}>Payment Successful!</h2>
             <p className={styles.successSub}>Your order <strong>#BM-{Math.floor(3000 + Math.random() * 999)}</strong> has been placed. You'll receive a confirmation SMS shortly.</p>
             <div className={styles.successMeta}>
-              <div className={styles.metaRow}><span>Amount Paid</span><strong>₦{grand.toLocaleString()}</strong></div>
+              <div className={styles.metaRow}><span>Amount Paid</span><strong>₦{totalAmount.toLocaleString()}</strong></div>
               <div className={styles.metaRow}><span>Delivery to</span><strong>{delivery.state}</strong></div>
               <div className={styles.metaRow}><span>Est. Delivery</span><strong>2–4 business days</strong></div>
             </div>
@@ -94,15 +161,23 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
               </label>
             </div>
             <div className={styles.deliveryOpts}>
-              <div className={`${styles.delOpt} ${styles.delOptActive}`}>
+              <div className={`${styles.delOpt} ${deliveryOpt === 'standard' ? styles.delOptActive : ''}`}
+                onClick={() => setDeliveryOpt('standard')}>
                 <div className={styles.delOptIcon}>🚚</div>
-                <div><div className={styles.delOptTitle}>Standard Delivery</div><div className={styles.delOptSub}>2–4 business days</div></div>
-                <div className={styles.delOptPrice}>Free</div>
+                <div>
+                  <div className={styles.delOptTitle}>Standard Delivery</div>
+                  <div className={styles.delOptSub}>2–4 business days</div>
+                </div>
+                <div className={styles.delOptPrice}>₦5,000</div>
               </div>
-              <div className={styles.delOpt}>
+              <div className={`${styles.delOpt} ${deliveryOpt === 'express' ? styles.delOptActive : ''}`}
+                onClick={() => setDeliveryOpt('express')}>
                 <div className={styles.delOptIcon}>⚡</div>
-                <div><div className={styles.delOptTitle}>Express Delivery</div><div className={styles.delOptSub}>Next business day</div></div>
-                <div className={styles.delOptPrice}>₦25,000</div>
+                <div>
+                  <div className={styles.delOptTitle}>Express Delivery</div>
+                  <div className={styles.delOptSub}>Next business day</div>
+                </div>
+                <div className={styles.delOptPrice}>₦15,000</div>
               </div>
             </div>
             <button className={styles.nextBtn} disabled={!delivery.name || !delivery.phone || !delivery.address} onClick={() => setStep(1)}>
@@ -120,7 +195,6 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
                 { id: 'card',     icon: '💳', name: 'Debit / Credit Card', sub: 'Visa, Mastercard, Verve' },
                 { id: 'transfer', icon: '🏦', name: 'Bank Transfer',       sub: 'Pay via direct transfer' },
                 { id: 'ussd',     icon: '📱', name: 'USSD',                sub: 'Dial code to pay'        },
-                { id: 'bnpl',     icon: '📅', name: 'Buy Now Pay Later',   sub: 'Carbon / CredPal'        },
               ].map(m => (
                 <button key={m.id} className={`${styles.methodTab} ${payMethod === m.id ? styles.methodTabActive : ''}`} onClick={() => setPayMethod(m.id)}>
                   <span className={styles.methodIcon}>{m.icon}</span>
@@ -168,7 +242,7 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
                       <button className={styles.copyBtn} onClick={() => navigator.clipboard?.writeText('2048109345')}>Copy</button>
                     </span>
                   </div>
-                  <div className={styles.transferRow}><span className={styles.transferLabel}>Amount</span><span className={styles.transferAmt}>₦{grand.toLocaleString()}</span></div>
+                  <div className={styles.transferRow}><span className={styles.transferLabel}>Amount</span><span className={styles.transferAmt}>₦{totalAmount.toLocaleString()}</span></div>
                   <div className={styles.transferRow}><span className={styles.transferLabel}>Reference</span><span className={styles.transferVal}><strong>BM-{Date.now().toString().slice(-8)}</strong></span></div>
                 </div>
                 <div className={styles.transferNote}>⚠️ Use the reference code as your narration so we can identify your payment.</div>
@@ -183,12 +257,12 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
               <div className={styles.payPanel}>
                 <div className={styles.ussdGrid}>
                   {[
-                    { bank: 'GTBank',       code: `*737*1*${grand}*10#` },
-                    { bank: 'First Bank',   code: `*894*${grand}#`      },
-                    { bank: 'Access Bank',  code: `*901*${grand}#`      },
-                    { bank: 'Zenith Bank',  code: `*966*${grand}#`      },
-                    { bank: 'UBA',          code: `*919*3*${grand}#`    },
-                    { bank: 'Sterling Bank',code: `*822*${grand}#`      },
+                    { bank: 'GTBank',       code: `*737*1*${totalAmount}*10#` },
+                    { bank: 'First Bank',   code: `*894*${totalAmount}#`      },
+                    { bank: 'Access Bank',  code: `*901*${totalAmount}#`      },
+                    { bank: 'Zenith Bank',  code: `*966*${totalAmount}#`      },
+                    { bank: 'UBA',          code: `*919*3*${totalAmount}#`    },
+                    { bank: 'Sterling Bank',code: `*822*${totalAmount}#`      },
                   ].map(u => (
                     <div key={u.bank} className={styles.ussdCard}>
                       <div className={styles.ussdBank}>{u.bank}</div>
@@ -200,26 +274,6 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
               </div>
             )}
 
-            {payMethod === 'bnpl' && (
-              <div className={styles.payPanel}>
-                <div className={styles.bnplOptions}>
-                  {[
-                    { name: 'Carbon (Paylater)', monthly: Math.round(grand / 3),  months: 3,  icon: '🟢' },
-                    { name: 'CredPal',           monthly: Math.round(grand / 6),  months: 6,  icon: '🔵' },
-                    { name: 'Paga Credit',       monthly: Math.round(grand / 12), months: 12, icon: '🟣' },
-                  ].map(b => (
-                    <div key={b.name} className={styles.bnplCard}>
-                      <span className={styles.bnplIcon}>{b.icon}</span>
-                      <div className={styles.bnplInfo}>
-                        <div className={styles.bnplName}>{b.name}</div>
-                        <div className={styles.bnplTerms}>{b.months} monthly payments of <strong>₦{b.monthly.toLocaleString()}</strong></div>
-                      </div>
-                      <button className={styles.bnplSelect}>Select</button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             <div className={styles.navRow}>
               <button className={styles.backBtn} onClick={() => setStep(0)}>← Back</button>
@@ -245,20 +299,43 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
             </div>
             <div className={styles.confirmMeta}>
               <div className={styles.confirmRow}><span>Subtotal</span><span>₦{subtotal.toLocaleString()}</span></div>
-              <div className={styles.confirmRow}><span>Delivery</span><span className={styles.free}>Free</span></div>
               <div className={styles.confirmRow}><span>VAT (7.5%)</span><span>₦{vat.toLocaleString()}</span></div>
+              <div className={styles.confirmRow}>
+                <span>{deliveryOpt === 'express' ? '⚡ Express Delivery' : '🚚 Standard Delivery'}</span>
+                <span>₦{deliveryFee.toLocaleString()}</span>
+              </div>
               <div className={styles.confirmRow}><span>Payment</span>
                 <span className={styles.methodBadge}>
-                  {payMethod === 'card' ? '💳 Card' : payMethod === 'transfer' ? '🏦 Transfer' : payMethod === 'ussd' ? '📱 USSD' : '📅 BNPL'}
+                  {payMethod === 'card' ? '💳 Card' : payMethod === 'transfer' ? '🏦 Transfer' : '📱 USSD'}
                 </span>
               </div>
               <div className={styles.confirmRow}><span>Deliver to</span><span>{delivery.address}, {delivery.state}</span></div>
             </div>
-            <div className={styles.grandTotal}><span>Total</span><span>₦{grand.toLocaleString()}</span></div>
+            <div className={styles.grandTotal}><span>Total</span><span>₦{totalAmount.toLocaleString()}</span></div>
+
+            {/* No-Refund Policy acknowledgment */}
+            <div className={styles.refundPolicy}>
+              <div className={styles.refundPolicyTitle}>⚠️ No-Refund Policy</div>
+              <div className={styles.refundPolicyText}>
+                Once your order has been confirmed and supplier processing begins,{' '}
+                <strong>no refunds will be issued</strong>. All disputes must be raised
+                through BuildMart Support — not directly with the supplier.
+              </div>
+              <label className={styles.refundAckRow}>
+                <input
+                  type="checkbox"
+                  checked={refundAck}
+                  onChange={e => setRefundAck(e.target.checked)}
+                  style={{ accentColor: 'var(--t400)' }}
+                />
+                <span>I understand and agree to the no-refund policy once order processing begins</span>
+              </label>
+            </div>
+
             <div className={styles.navRow}>
               <button className={styles.backBtn} onClick={() => setStep(1)}>← Back</button>
-              <button className={styles.payBtn} onClick={handlePay} disabled={loading}>
-                {loading ? <span className={styles.spinner} /> : `Pay ₦${grand.toLocaleString()}`}
+              <button className={styles.payBtn} onClick={handlePay} disabled={loading || !refundAck}>
+                {loading ? <span className={styles.spinner} /> : `Pay ₦${totalAmount.toLocaleString()}`}
               </button>
             </div>
           </div>

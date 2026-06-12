@@ -5,8 +5,8 @@
 .sidebar {
   width: 220px;
   min-width: 220px;
-  background: var(--bg-primary);
-  border-right: 0.5px solid var(--border);
+  background: var(--surface-card);
+  border-right: 0.5px solid var(--border-default);
   padding: 1.25rem 0;
   min-height: calc(100vh - 200px);
 }
@@ -39,26 +39,26 @@
 }
 
 .catItem:hover {
-  background: var(--bg-secondary);
+  background: var(--surface-interactive);
 }
 
 .catItem.active {
-  background: var(--t50);
-  color: var(--t800);
+  background: var(--accent-bg);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .catCount {
   font-size: 11px;
   color: var(--text-secondary);
-  background: var(--bg-secondary);
+  background: var(--surface-interactive);
   padding: 1px 7px;
   border-radius: 10px;
 }
 
 .catItem.active .catCount {
-  background: var(--t100);
-  color: var(--t800);
+  background: var(--accent-border);
+  color: var(--text-primary);
 }
 
 .checkRow {
@@ -71,7 +71,7 @@
 }
 
 .checkRow input {
-  accent-color: var(--t400);
+  accent-color: var(--accent-default);
 }
 
 .content {
@@ -100,11 +100,11 @@
 }
 
 .sortSelect {
-  border: 0.5px solid var(--border-hover);
+  border: 0.5px solid var(--border-emphasis);
   border-radius: 7px;
   padding: 6px 10px;
   font-size: 13px;
-  background: var(--bg-secondary);
+  background: var(--surface-interactive);
   color: var(--text-primary);
   cursor: pointer;
 }

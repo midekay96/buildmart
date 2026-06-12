@@ -23,8 +23,8 @@
 
 .browseBtn {
   margin-top: 1rem;
-  background: var(--t200);
-  color: var(--t900);
+  background: var(--accent-default);
+  color: var(--text-primary);
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
@@ -40,8 +40,8 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: var(--bg-primary);
-  border: 0.5px solid var(--border);
+  background: var(--surface-card);
+  border: 0.5px solid var(--border-default);
   border-radius: 12px;
   margin-bottom: 8px;
 }
@@ -70,9 +70,9 @@
 .qtyControls button {
   width: 24px;
   height: 24px;
-  border: 0.5px solid var(--border-hover);
+  border: 0.5px solid var(--border-emphasis);
   border-radius: 5px;
-  background: var(--bg-secondary);
+  background: var(--surface-interactive);
   cursor: pointer;
   font-size: 14px;
   color: var(--text-primary);
@@ -90,7 +90,7 @@
 .itemEach  { font-size: 10px; color: var(--text-secondary); }
 
 .summary {
-  background: var(--bg-secondary);
+  background: var(--surface-interactive);
   border-radius: 12px;
   padding: 1.25rem;
   margin-top: 1rem;
@@ -101,7 +101,7 @@
   justify-content: space-between;
   font-size: 13px;
   padding: 6px 0;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border-default);
   color: var(--text-secondary);
 }
 
@@ -113,7 +113,7 @@
   justify-content: space-between;
   padding-top: 12px;
   margin-top: 4px;
-  border-top: 0.5px solid var(--border);
+  border-top: 0.5px solid var(--border-default);
   font-weight: 600;
 }
 

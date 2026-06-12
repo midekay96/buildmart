@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const ThemeContext = createContext({ theme: 'dark', toggleTheme: () => {} });
+const ThemeContext = createContext({ theme: 'light', toggleTheme: () => {} });
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    try { return localStorage.getItem('bm_theme') || 'dark'; }
-    catch { return 'dark'; }
+    try { return localStorage.getItem('bm_theme') || 'light'; }
+    catch { return 'light'; }
   });
 
   useEffect(() => {

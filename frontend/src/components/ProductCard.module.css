@@ -1,28 +1,51 @@
 .card {
-  background: var(--bg-primary);
-  border: 0.5px solid var(--border);
-  border-radius: 12px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
+  transition: all var(--transition-normal);
   position: relative;
 }
 
 .card:hover {
-  border-color: var(--t400);
+  border-color: var(--border-emphasis);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
 .imgArea {
-  height: 120px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+  background: var(--surface-interactive);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .img {
+  transform: scale(1.05);
+}
+
+.iconFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon {
-  font-size: 38px;
+  font-size: 42px;
 }
 
 .badge {
@@ -38,7 +61,7 @@
 }
 
 .badge_sale { background: #E24B4A; color: white; }
-.badge_new  { background: var(--t400); color: white; }
+.badge_new  { background: var(--accent-default); color: white; }
 .badge_hot  { background: #BA7517; color: white; }
 
 .body {
@@ -66,6 +89,22 @@
   color: var(--text-secondary);
 }
 
+.supplierTag {
+  font-size: 10px;
+  color: var(--accent-hover);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  display: inline-block;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -76,7 +115,7 @@
 .price {
   font-size: 15px;
   font-weight: 600;
-  color: var(--t600);
+  color: var(--accent-hover);
 }
 
 .oldPrice {
@@ -86,7 +125,7 @@
 }
 
 .addBtn {
-  background: var(--t600);
+  background: var(--accent-default);
   color: white;
   border: none;
   border-radius: 6px;
@@ -96,13 +135,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .addBtn:hover {
-  background: var(--t400);
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .addBtn.added {
-  background: var(--t200);
+  background: var(--success-default);
 }

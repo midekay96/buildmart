@@ -4,22 +4,43 @@
   padding: 0;
 }
 
+/* ── Brand colour tokens (always available) ───────────────────────────────── */
 :root {
-  --t50: #E1F5EE;
+  --t50:  #E1F5EE;
   --t100: #9FE1CB;
   --t200: #5DCAA5;
   --t400: #1D9E75;
   --t600: #0F6E56;
   --t800: #085041;
   --t900: #04342C;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f5;
-  --text-primary: #1a1a1a;
-  --text-secondary: #666666;
-  --border: #e0e0e0;
-  --border-hover: #b0b0b0;
+
+  /* ── Light theme (default) ──────────────────────────────────────────────── */
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f5f5f5;
+  --text-primary:  #1a1a1a;
+  --text-secondary:#666666;
+  --border:        #e0e0e0;
+  --border-hover:  #b0b0b0;
+
+  /* Admin panel tokens (always dark) */
+  --admin-bg:      #0D1117;
+  --admin-surface: #161B22;
+  --admin-border:  #30363D;
+  --admin-text:    #E6EDF3;
+  --admin-muted:   #8B949E;
+
   --radius-md: 8px;
   --radius-lg: 12px;
+}
+
+/* ── Dark theme (toggled via data-theme="dark" on <html>) ─────────────────── */
+[data-theme="dark"] {
+  --bg-primary:    #161B22;
+  --bg-secondary:  #0D1117;
+  --text-primary:  #E6EDF3;
+  --text-secondary:#8B949E;
+  --border:        #30363D;
+  --border-hover:  #444C56;
 }
 
 body {
@@ -27,6 +48,7 @@ body {
   background: var(--bg-secondary);
   color: var(--text-primary);
   min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
 }
 
 button {
@@ -34,6 +56,6 @@ button {
   font-family: 'DM Sans', sans-serif;
 }
 
-input, select {
+input, select, textarea {
   font-family: 'DM Sans', sans-serif;
 }

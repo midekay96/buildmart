@@ -1,11 +1,10 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import { PRODUCT_CATEGORIES } from '../config/constants.js';
 
 const Product = sequelize.define('Product', {
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true
   },
   name: {
@@ -13,59 +12,69 @@ const Product = sequelize.define('Product', {
     allowNull: false,
     validate: { notEmpty: true }
   },
+  brand: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   description: {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  category: {
-    type: DataTypes.ENUM(...PRODUCT_CATEGORIES),
-    allowNull: false
+  cat: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    comment: 'Category short name e.g. Cement, Iron, Tiles'
   },
   price: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-    validate: { min: 0 }
-  },
-  discountPrice: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: true,
-    validate: { min: 0 }
-  },
-  sku: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  images: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: [],
-    allowNull: true
-  },
-  stock: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
-    validate: { min: 0 }
+    allowNull: false,
+    validate: { min: 0 },
+    comment: 'Price in NGN (no decimals for building materials)'
+  },
+  oldPrice: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    comment: 'Strike-through price for sales'
   },
   unit: {
     type: DataTypes.STRING,
-    defaultValue: 'piece'
+    allowNull: false,
+    defaultValue: 'per piece'
+  },
+  icon: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    comment: 'Emoji fallback icon'
+  },
+  badge: {
+    type: DataTypes.ENUM('hot', 'new', 'sale'),
+    allowNull: true
+  },
+  color: {
+    type: DataTypes.STRING(10),
+    allowNull: true,
+    defaultValue: '#F5F5F5',
+    comment: 'Fallback background colour hex'
+  },
+  img: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    comment: 'Product image URL (Unsplash or Cloudinary)'
   },
   supplierId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: true,
+    comment: 'FK to suppliers table'
   },
-  rating: {
-    type: DataTypes.FLOAT,
-    defaultValue: 0,
-    validate: { min: 0, max: 5 }
+  supplierName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    comment: 'Denormalised supplier name for fast reads'
   },
-  reviewCount: {
+  stock: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 999,
+    validate: { min: 0 }
   },
   isActive: {
     type: DataTypes.BOOLEAN,
@@ -79,10 +88,28 @@ const Product = sequelize.define('Product', {
   timestamps: true,
   tableName: 'products',
   indexes: [
-    { fields: ['category'] },
+    { fields: ['cat'] },
     { fields: ['supplierId'] },
-    { fields: ['sku'] }
+    { fields: ['isActive'] }
   ]
+});
+
+// Helper: format product for frontend response
+Product.format = (p) => ({
+  id:          p.id,
+  name:        p.name,
+  brand:       p.brand,
+  cat:         p.cat,
+  supplier:    p.supplierName,
+  price:       p.price,
+  oldPrice:    p.oldPrice,
+  unit:        p.unit,
+  icon:        p.icon,
+  badge:       p.badge,
+  color:       p.color,
+  img:         p.img,
+  stock:       p.stock,
+  isFeatured:  p.isFeatured
 });
 
 export default Product;

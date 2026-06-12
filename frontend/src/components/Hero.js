@@ -17,7 +17,13 @@ function Hero({ setActiveTab }) {
           <button className={styles.btnPrimary} onClick={() => setActiveTab('estimator')}>
             📐 Open Estimator
           </button>
-          <button className={styles.btnSecondary} onClick={() => setActiveTab('shop')}>
+          <button className={styles.btnSecondary} onClick={() => {
+            setActiveTab('shop');
+            setTimeout(() => {
+              const el = document.getElementById('materials-grid');
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 120);
+          }}>
             Browse Materials →
           </button>
         </div>

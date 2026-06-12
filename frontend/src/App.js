@@ -97,12 +97,14 @@ function AppInner() {
             categoryFilter={categoryFilter}
             setCategoryFilter={setCategoryFilter}
           />
-          <Shop
-            searchQuery={searchQuery}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            addToCart={addToCart}
-          />
+          <div id="materials-grid">
+            <Shop
+              searchQuery={searchQuery}
+              categoryFilter={categoryFilter}
+              setCategoryFilter={setCategoryFilter}
+              addToCart={addToCart}
+            />
+          </div>
         </>
       )}
       {activeTab === 'estimator' && <Estimator />}

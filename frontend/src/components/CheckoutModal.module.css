@@ -11,7 +11,7 @@
   overflow-y: auto;
 }
 .modal {
-  background: var(--bg-primary);
+  background: var(--surface-card);
   border-radius: 16px;
   width: 100%;
   max-width: 520px;
@@ -24,7 +24,7 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 .header {
-  background: var(--t900);
+  background: var(--surface-section);
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
@@ -34,18 +34,19 @@
   font-family: 'Syne', sans-serif;
   font-size: 17px;
   font-weight: 800;
-  color: var(--t100);
+  color: var(--text-primary);
 }
 .closeBtn {
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: var(--t200);
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
   width: 28px; height: 28px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
+  transition: all var(--transition-fast);
 }
-.closeBtn:hover { background: rgba(255,255,255,0.2); }
+.closeBtn:hover { background: var(--surface-hover); border-color: var(--border-emphasis); }
 .stepper {
   display: flex;
   align-items: center;
@@ -64,12 +65,12 @@
   flex-shrink: 0;
   transition: background 0.2s, color 0.2s;
 }
-.stepActive { background: var(--t400); color: white; }
-.stepDone   { background: var(--t600); color: white; }
+.stepActive { background: var(--accent-default); color: white; }
+.stepDone   { background: var(--accent-hover); color: white; }
 .stepLabel  { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
-.stepLabelActive { color: var(--t600); font-weight: 600; }
+.stepLabelActive { color: var(--accent-hover); font-weight: 600; }
 .stepLine { flex: 1; height: 1.5px; background: var(--border); margin: 0 6px; }
-.stepLineDone { background: var(--t400); }
+.stepLineDone { background: var(--accent-default); }
 .body { padding: 1.5rem; }
 .sectionTitle { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; }
 .formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
@@ -86,7 +87,7 @@
   color: var(--text-primary);
   outline: none;
 }
-.fInput:focus, .fSelect:focus { border-color: var(--t400); }
+.fInput:focus, .fSelect:focus { border-color: var(--accent-default); }
 .deliveryOpts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
 .delOpt {
   display: flex; align-items: center; gap: 12px;
@@ -94,12 +95,12 @@
   border: 1.5px solid var(--border);
   border-radius: 10px; cursor: pointer;
 }
-.delOpt:hover { border-color: var(--t200); }
-.delOptActive { border-color: var(--t400); background: var(--t50); }
+.delOpt:hover { border-color: var(--text-secondary); }
+.delOptActive { border-color: var(--accent-default); background: var(--accent-bg); }
 .delOptIcon { font-size: 20px; }
 .delOptTitle { font-size: 13px; font-weight: 500; }
 .delOptSub   { font-size: 11px; color: var(--text-secondary); }
-.delOptPrice { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--t600); }
+.delOptPrice { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--accent-hover); }
 .methodTabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
 .methodTab {
   display: flex; align-items: center; gap: 10px;
@@ -110,20 +111,20 @@
   cursor: pointer; text-align: left;
   transition: border-color 0.15s, background 0.15s;
 }
-.methodTab:hover { border-color: var(--t200); }
-.methodTabActive { border-color: var(--t400); background: var(--t50); }
+.methodTab:hover { border-color: var(--text-secondary); }
+.methodTabActive { border-color: var(--accent-default); background: var(--accent-bg); }
 .methodIcon { font-size: 20px; flex-shrink: 0; }
 .methodName { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 .methodSub  { font-size: 11px; color: var(--text-secondary); }
 .payPanel { margin-bottom: 1rem; }
 .cardPreview {
-  background: linear-gradient(135deg, var(--t900), var(--t600));
+  background: linear-gradient(135deg, var(--surface-section), var(--accent-hover));
   border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; color: white;
 }
 .cardPreviewTop { display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 20px; }
-.cardNumber { font-size: 17px; letter-spacing: 3px; font-family: monospace; margin-bottom: 1rem; color: var(--t100); }
+.cardNumber { font-size: 17px; letter-spacing: 3px; font-family: monospace; margin-bottom: 1rem; color: var(--text-primary); }
 .cardBottom { display: flex; justify-content: space-between; }
-.cardFieldLabel { font-size: 9px; letter-spacing: 1px; color: var(--t200); margin-bottom: 3px; }
+.cardFieldLabel { font-size: 9px; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 3px; }
 .cardFieldVal { font-size: 12px; font-weight: 500; color: white; }
 .secureBadge { font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 10px; }
 .transferInfo {
@@ -131,7 +132,7 @@
   border: 0.5px solid var(--border);
   border-radius: 12px; padding: 1.25rem; margin-bottom: 12px;
 }
-.transferBankName { font-size: 14px; font-weight: 700; color: var(--t800); margin-bottom: 12px; }
+.transferBankName { font-size: 14px; font-weight: 700; color: var(--accent-default); margin-bottom: 12px; }
 .transferRow {
   display: flex; justify-content: space-between; align-items: center;
   padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px;
@@ -139,11 +140,11 @@
 .transferRow:last-child { border-bottom: none; }
 .transferLabel { color: var(--text-secondary); }
 .transferVal   { font-weight: 500; display: flex; align-items: center; gap: 8px; }
-.transferAmt   { font-weight: 700; color: var(--t600); font-size: 16px; }
+.transferAmt   { font-weight: 700; color: var(--accent-hover); font-size: 16px; }
 .copyBtn {
-  background: var(--t50); border: 0.5px solid var(--t100);
+  background: var(--accent-bg); border: 0.5px solid var(--text-primary);
   border-radius: 5px; padding: 2px 8px;
-  font-size: 11px; color: var(--t800); cursor: pointer;
+  font-size: 11px; color: var(--accent-default); cursor: pointer;
 }
 .transferNote {
   font-size: 12px; color: #BA7517;
@@ -154,7 +155,7 @@
 .ussdGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 .ussdCard { background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: 8px; padding: 10px; }
 .ussdBank { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
-.ussdCode { font-size: 11px; color: var(--t600); font-family: monospace; font-weight: 600; }
+.ussdCode { font-size: 11px; color: var(--accent-hover); font-family: monospace; font-weight: 600; }
 .bnplOptions { display: flex; flex-direction: column; gap: 8px; }
 .bnplCard { display: flex; align-items: center; gap: 12px; padding: 12px; border: 0.5px solid var(--border); border-radius: 10px; }
 .bnplIcon  { font-size: 24px; }
@@ -162,11 +163,11 @@
 .bnplName  { font-size: 13px; font-weight: 600; }
 .bnplTerms { font-size: 12px; color: var(--text-secondary); }
 .bnplSelect {
-  background: var(--t50); border: 0.5px solid var(--t200);
+  background: var(--accent-bg); border: 0.5px solid var(--text-secondary);
   border-radius: 6px; padding: 5px 12px;
-  font-size: 12px; font-weight: 600; color: var(--t800); cursor: pointer;
+  font-size: 12px; font-weight: 600; color: var(--accent-default); cursor: pointer;
 }
-.bnplSelect:hover { background: var(--t100); }
+.bnplSelect:hover { background: var(--text-primary); }
 .orderItems {
   background: var(--bg-secondary); border-radius: 10px;
   padding: 10px; margin-bottom: 1rem;
@@ -183,7 +184,7 @@
   font-size: 16px; flex-shrink: 0;
 }
 .orderItemName  { flex: 1; color: var(--text-primary); }
-.orderItemPrice { font-weight: 600; color: var(--t600); white-space: nowrap; }
+.orderItemPrice { font-weight: 600; color: var(--accent-hover); white-space: nowrap; }
 .confirmMeta { margin-bottom: 1rem; }
 .confirmRow {
   display: flex; justify-content: space-between;
@@ -191,46 +192,49 @@
   border-bottom: 0.5px solid var(--border); color: var(--text-secondary);
 }
 .confirmRow:last-child { border-bottom: none; }
-.free { color: var(--t400); font-weight: 500; }
+.free { color: var(--accent-default); font-weight: 500; }
 .methodBadge {
-  background: var(--t50); color: var(--t800);
+  background: var(--accent-bg); color: var(--accent-default);
   padding: 2px 10px; border-radius: 20px;
   font-size: 12px; font-weight: 500;
 }
 .grandTotal {
   display: flex; justify-content: space-between;
   padding: 12px 0;
-  border-top: 1.5px solid var(--t100);
+  border-top: 1.5px solid var(--text-primary);
   font-weight: 700; font-size: 16px;
-  color: var(--t800); margin-bottom: 1.5rem;
+  color: var(--accent-default); margin-bottom: 1.5rem;
 }
 .navRow { display: flex; gap: 10px; }
 .backBtn {
-  background: var(--bg-secondary);
-  border: 0.5px solid var(--border-hover);
+  background: var(--surface-interactive);
+  border: 1px solid var(--border-default);
   border-radius: 8px; padding: 10px 18px;
   font-size: 13px; font-weight: 500;
   color: var(--text-primary); cursor: pointer;
+  transition: all var(--transition-normal);
 }
-.backBtn:hover { background: var(--border); }
+.backBtn:hover { background: var(--surface-elevated); border-color: var(--border-emphasis); }
 .nextBtn {
   flex: 1;
-  background: var(--t400); color: white;
+  background: var(--accent-default); color: white;
   border: none; border-radius: 8px;
   padding: 10px 18px; font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: background 0.15s;
+  cursor: pointer; transition: all var(--transition-normal);
 }
-.nextBtn:hover:not(:disabled) { background: var(--t600); }
-.nextBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+.nextBtn:hover:not(:disabled) { background: var(--accent-hover); box-shadow: var(--shadow-md); }
+.nextBtn:disabled { background: var(--accent-disabled); cursor: not-allowed; }
 .payBtn {
   flex: 1;
-  background: linear-gradient(135deg, var(--t400), var(--t600));
+  background: var(--accent-default);
   color: white; border: none; border-radius: 8px;
   padding: 12px 18px; font-size: 15px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
-.payBtn:hover:not(:disabled) { opacity: 0.9; }
-.payBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.payBtn:hover:not(:disabled) { background: var(--accent-hover); box-shadow: var(--shadow-lg); }
+.payBtn:disabled { background: var(--accent-disabled); cursor: not-allowed; }
 .spinner {
   width: 18px; height: 18px;
   border: 2.5px solid rgba(255,255,255,0.3);
@@ -241,7 +245,7 @@
 .successScreen { padding: 2.5rem; text-align: center; }
 .successCircle {
   width: 64px; height: 64px;
-  background: var(--t400); border-radius: 50%;
+  background: var(--accent-default); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px; color: white;
   margin: 0 auto 1.25rem;
@@ -251,7 +255,7 @@
   from { transform: scale(0); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
-.successTitle { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--t800); margin-bottom: 8px; }
+.successTitle { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent-default); margin-bottom: 8px; }
 .successSub { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
 .successMeta { background: var(--bg-secondary); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: left; }
 .metaRow {
@@ -262,8 +266,40 @@
 .metaRow:last-child { border-bottom: none; }
 .metaRow strong { color: var(--text-primary); }
 .doneBtn {
-  background: var(--t400); color: white;
+  background: var(--accent-default); color: white;
   border: none; border-radius: 8px;
   padding: 12px 32px; font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
-.doneBtn:hover { background: var(--t600); }
+.doneBtn:hover { background: var(--accent-hover); box-shadow: var(--shadow-lg); }
+
+/* ── No-refund policy block ───────────────────────────────── */
+.refundPolicy {
+  background: rgba(239,159,39,0.08);
+  border: 1px solid rgba(239,159,39,0.3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.refundPolicyTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #BA7517;
+  margin-bottom: 6px;
+}
+.refundPolicyText {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.refundAckRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1.5;
+}

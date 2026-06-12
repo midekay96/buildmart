@@ -69,6 +69,21 @@ export async function getMyOrders() {
   return sampleOrders;
 }
 
+export async function placeOrder({ items, delivery, deliveryOption, total, paymentReference }) {
+  if (IS_LIVE) {
+    return apiFetch('/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({ items, delivery, deliveryOption, total, paymentReference }),
+    });
+  }
+  // Mock: simulate order placement
+  return {
+    success: true,
+    orderNumber: `#BM-${Math.floor(3000 + Math.random() * 999)}`,
+    estimatedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB'),
+  };
+}
+
 // ── Customers ─────────────────────────────────────────────────────────────────
 export async function getCustomers() {
   if (IS_LIVE) return apiFetch('/api/customers');
@@ -76,10 +91,11 @@ export async function getCustomers() {
   return customers;
 }
 
-// ── Suppliers (admin-managed only) ───────────────────────────────────────────
+// ── Suppliers ─────────────────────────────────────────────────────────────────
+// Storefront uses products.js; admin SuppliersPage uses adminData directly.
 export async function getSuppliers() {
   if (IS_LIVE) return apiFetch('/api/suppliers');
-  const { suppliers } = await import('../admin/adminData');
+  const { suppliers } = await import('../data/products');
   return suppliers;
 }
 
@@ -106,6 +122,22 @@ export async function initiatePayment({ amount, email, orderId, metadata }) {
   return new Promise(resolve =>
     setTimeout(() => resolve({ success: true, reference: `BM-${Date.now()}` }), 2000)
   );
+}
+
+export async function verifyPayment(reference) {
+  if (IS_LIVE) return apiFetch(`/api/payments/verify/${reference}`);
+  return { success: true, paid: true, amount: 0, reference };
+}
+
+// ── Products (admin update) ───────────────────────────────────────────────────
+export async function updateProductPrice(id, price) {
+  if (IS_LIVE) {
+    return apiFetch(`/api/admin/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ price }),
+    });
+  }
+  return { success: true };
 }
 
 // ── Support (owner handles all supplier contact) ──────────────────────────────

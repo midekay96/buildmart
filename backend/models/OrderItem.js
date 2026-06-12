@@ -27,11 +27,15 @@ const OrderItem = sequelize.define('OrderItem', {
   },
   productName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true     // stored as snapshot at time of order
+  },
+  total: {
+    type: DataTypes.INTEGER,
+    allowNull: true
   },
   sku: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 }, {
   timestamps: true,
