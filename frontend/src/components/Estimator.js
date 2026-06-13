@@ -662,13 +662,18 @@ function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES
         <p className={styles.cardSub}>Describe your custom project or select from pre-defined building types</p>
       </div>
 
-      {/* CUSTOM PROJECT SECTION — UNCHANGED */}
+      {/* CUSTOM PROJECT SECTION */}
       <div className={styles.sectionLabel}>✏️ Describe Your Custom Project</div>
       <div className={styles.customBox}>
         <label className={styles.label}>Tell us about your project</label>
         <textarea className={styles.textarea}
           placeholder="e.g. I want to build a 4-storey office complex with modern finishes, basement parking, and rooftop garden..."
           value={form.customBuildingDesc} onChange={e => { setF('customBuildingDesc', e.target.value); setF('buildingType', ''); }} />
+        {form.customBuildingDesc && (
+          <button className={styles.customBoxNextBtn} onClick={next} disabled={!form.customBuildingDesc.trim()}>
+            Next: Structural Specs →
+          </button>
+        )}
       </div>
 
       {/* SMART SEARCH */}
