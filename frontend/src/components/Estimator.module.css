@@ -262,6 +262,8 @@
 }
 
 .input, .select, .textarea {
+  width: 100%;
+  box-sizing: border-box;
   background: var(--surface-interactive);
   border: 1.5px solid var(--border-default);
   border-radius: 10px;
@@ -307,7 +309,7 @@
 }
 
 .textarea {
-  min-height: 180px;
+  min-height: 240px;
   resize: vertical;
 }
 
