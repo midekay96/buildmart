@@ -762,6 +762,30 @@ function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES
 }
 
 // ── Structural Specs Step Component ──────────────────────────────────────
+// ── Helper: Get recommended work phases based on building type and floors
+function getRecommendedPhases(selectedType, floors, PHASES) {
+  if (!selectedType || !PHASES) return [];
+
+  const isResidential = selectedType.categoryId === 'residential';
+  const isMultiStorey = floors > 1;
+
+  // Core structural phases (always included)
+  const recommended = ['foundation', 'blockwork', 'roofing', 'plastering', 'flooring', 'painting'];
+
+  // Add multi-storey phases if applicable
+  if (isMultiStorey) {
+    recommended.push('decking', 'staircase');
+  }
+
+  // Add finishing and MEP phases
+  recommended.push('plumbing', 'electrical', 'windows');
+
+  // Add external works for all
+  recommended.push('siteworks');
+
+  return PHASES.filter(p => recommended.includes(p.id)).map(p => p.id);
+}
+
 // ── Helper: Get recommended option based on building type and quality
 function getRecommendation(selectedType, quality, optionType, FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES) {
   if (!selectedType) return null;
@@ -794,18 +818,51 @@ function getRecommendation(selectedType, quality, optionType, FOUNDATION_TYPES, 
   return null;
 }
 
-// ── Summary Card Component ──────────────────────────────────────────────────
-function SummarySectionCard({ title, value, icon, onEdit, styles }) {
+// ── Compact Summary Panel Component ─────────────────────────────────────────
+function SpecificationsSummary({ form, specs, onEdit, QUALITY_TIERS, FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES, styles }) {
+  const floors = Number(form.floors) || 1;
+  const needsSlab = floors > 1;
+
+  const summaryItems = [
+    form.area && {
+      label: 'Project',
+      value: `${form.area}m² • ${floors} floor${floors !== 1 ? 's' : ''}`,
+    },
+    form.quality && {
+      label: 'Quality',
+      value: QUALITY_TIERS.find(q => q.id === form.quality)?.label,
+    },
+    specs.foundation && {
+      label: 'Foundation',
+      value: FOUNDATION_TYPES.find(f => f.id === specs.foundation)?.label,
+    },
+    specs.wallType && {
+      label: 'Wall',
+      value: WALL_TYPES.find(w => w.id === specs.wallType)?.label,
+    },
+    (needsSlab && specs.slabType) && {
+      label: 'Slab',
+      value: SLAB_TYPES.find(s => s.id === specs.slabType)?.label,
+    },
+    specs.roofType && {
+      label: 'Roof',
+      value: ROOF_TYPES.find(r => r.id === specs.roofType)?.label,
+    },
+  ].filter(Boolean);
+
+  if (summaryItems.length === 0) return null;
+
   return (
-    <div className={styles.summarySectionCard}>
-      <div className={styles.summarySectionContent}>
-        {icon && <span className={styles.summarySectionIcon}>{icon}</span>}
-        <div>
-          <div className={styles.summarySectionTitle}>{title}</div>
-          <div className={styles.summarySectionValue}>{value}</div>
-        </div>
+    <div className={styles.specificationsSummary}>
+      <div className={styles.summaryGrid}>
+        {summaryItems.map((item, idx) => (
+          <div key={idx} className={styles.summaryItem}>
+            <div className={styles.summaryItemLabel}>{item.label}</div>
+            <div className={styles.summaryItemValue}>{item.value}</div>
+          </div>
+        ))}
       </div>
-      <button className={styles.summarySectionEditBtn} onClick={onEdit}>Edit</button>
+      <button className={styles.summaryEditBtn} onClick={onEdit}>Modify Specifications</button>
     </div>
   );
 }
@@ -885,6 +942,32 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
     setExpandedPhaseGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
   };
 
+  const handleSelectRecommendedPhases = () => {
+    const recommended = getRecommendedPhases(selectedType, floors, PHASES);
+    const currentSelected = new Set(selected);
+
+    // Add recommended phases
+    recommended.forEach(phaseId => {
+      if (!currentSelected.has(phaseId)) {
+        currentSelected.add(phaseId);
+      }
+    });
+
+    setSelected(Array.from(currentSelected));
+
+    // Expand groups that have recommended phases
+    const recommendedSet = new Set(recommended);
+    const newExpanded = {};
+    PHASE_GROUPS.forEach(group => {
+      const groupPhases = PHASES.filter(p => p.group === group.id);
+      const hasRecommended = groupPhases.some(p => recommendedSet.has(p.id));
+      if (hasRecommended) {
+        newExpanded[group.id] = true;
+      }
+    });
+    setExpandedPhaseGroups(newExpanded);
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
@@ -900,67 +983,23 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         styles={styles}
       />
 
-      {/* COMPLETED SECTIONS — SUMMARY CARDS */}
+      {/* COMPACT SUMMARY PANEL */}
+      {(form.area || form.quality || specs.foundation || specs.wallType || specs.slabType || specs.roofType) && (
+        <SpecificationsSummary
+          form={form}
+          specs={specs}
+          onEdit={() => setActiveSection('dimensions')}
+          QUALITY_TIERS={QUALITY_TIERS}
+          FOUNDATION_TYPES={FOUNDATION_TYPES}
+          WALL_TYPES={WALL_TYPES}
+          SLAB_TYPES={SLAB_TYPES}
+          ROOF_TYPES={ROOF_TYPES}
+          styles={styles}
+        />
+      )}
+
+      {/* ACTIVE CONFIGURATION PANEL */}
       <div className={styles.progressiveContent}>
-        {form.area && form.floors && activeSection !== 'dimensions' && (
-          <SummarySectionCard
-            title="Project Dimensions"
-            value={`${form.area}m² • ${form.floors} floor${floors !== 1 ? 's' : ''}`}
-            icon="📐"
-            onEdit={() => setActiveSection('dimensions')}
-            styles={styles}
-          />
-        )}
-
-        {form.quality && activeSection !== 'quality' && (
-          <SummarySectionCard
-            title="Quality Tier"
-            value={QUALITY_TIERS.find(q => q.id === form.quality)?.label || form.quality}
-            icon="⭐"
-            onEdit={() => setActiveSection('quality')}
-            styles={styles}
-          />
-        )}
-
-        {specs.foundation && activeSection !== 'foundation' && (
-          <SummarySectionCard
-            title="Foundation"
-            value={FOUNDATION_TYPES.find(f => f.id === specs.foundation)?.label || specs.foundation}
-            icon="⬇️"
-            onEdit={() => setActiveSection('foundation')}
-            styles={styles}
-          />
-        )}
-
-        {specs.wallType && activeSection !== 'wall' && (
-          <SummarySectionCard
-            title="Wall Type"
-            value={WALL_TYPES.find(w => w.id === specs.wallType)?.label || specs.wallType}
-            icon="🧱"
-            onEdit={() => setActiveSection('wall')}
-            styles={styles}
-          />
-        )}
-
-        {needsSlab && specs.slabType && activeSection !== 'slab' && (
-          <SummarySectionCard
-            title="Slab Type"
-            value={SLAB_TYPES.find(s => s.id === specs.slabType)?.label || specs.slabType}
-            icon="🏗️"
-            onEdit={() => setActiveSection('slab')}
-            styles={styles}
-          />
-        )}
-
-        {specs.roofType && activeSection !== 'roof' && (
-          <SummarySectionCard
-            title="Roof Type"
-            value={ROOF_TYPES.find(r => r.id === specs.roofType)?.label || specs.roofType}
-            icon="🏠"
-            onEdit={() => setActiveSection('roof')}
-            styles={styles}
-          />
-        )}
 
         {/* ACTIVE SECTION: PROJECT DIMENSIONS */}
         {activeSection === 'dimensions' && (
@@ -1135,6 +1174,12 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'phases' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>✅ Select Work Phases</h3>
+            <button
+              className={styles.selectRecommendedBtn}
+              onClick={handleSelectRecommendedPhases}
+              disabled={!selectedType || selected.length === getRecommendedPhases(selectedType, floors, PHASES).length}>
+              ✨ Select Recommended Phases
+            </button>
             <div className={styles.phasesContainer}>
               {PHASE_GROUPS.map(group => {
                 const groupPhases = PHASES.filter(p => p.group === group.id);
