@@ -827,26 +827,32 @@ function SpecificationsSummary({ form, specs, onEdit, QUALITY_TIERS, FOUNDATION_
     form.area && {
       label: 'Project',
       value: `${form.area}m² • ${floors} floor${floors !== 1 ? 's' : ''}`,
+      section: 'dimensions',
     },
     form.quality && {
       label: 'Quality',
       value: QUALITY_TIERS.find(q => q.id === form.quality)?.label,
+      section: 'quality',
     },
     specs.foundation && {
       label: 'Foundation',
       value: FOUNDATION_TYPES.find(f => f.id === specs.foundation)?.label,
+      section: 'foundation',
     },
     specs.wallType && {
       label: 'Wall',
       value: WALL_TYPES.find(w => w.id === specs.wallType)?.label,
+      section: 'wall',
     },
     (needsSlab && specs.slabType) && {
       label: 'Slab',
       value: SLAB_TYPES.find(s => s.id === specs.slabType)?.label,
+      section: 'slab',
     },
     specs.roofType && {
       label: 'Roof',
       value: ROOF_TYPES.find(r => r.id === specs.roofType)?.label,
+      section: 'roof',
     },
   ].filter(Boolean);
 
@@ -856,13 +862,16 @@ function SpecificationsSummary({ form, specs, onEdit, QUALITY_TIERS, FOUNDATION_
     <div className={styles.specificationsSummary}>
       <div className={styles.summaryGrid}>
         {summaryItems.map((item, idx) => (
-          <div key={idx} className={styles.summaryItem}>
-            <div className={styles.summaryItemLabel}>{item.label}</div>
-            <div className={styles.summaryItemValue}>{item.value}</div>
-          </div>
+          <button key={idx} className={styles.summaryItemButton} onClick={() => onEdit?.(item.section)}>
+            <div className={styles.summaryItem}>
+              <div className={styles.summaryItemLabel}>{item.label}</div>
+              <div className={styles.summaryItemValue}>{item.value}</div>
+            </div>
+            <div className={styles.summaryItemEditIcon}>✎</div>
+          </button>
         ))}
       </div>
-      <button className={styles.summaryEditBtn} onClick={onEdit}>Modify Specifications</button>
+      <button className={styles.summaryEditBtn} onClick={() => onEdit?.('dimensions')}>← Back to Edit All</button>
     </div>
   );
 }
@@ -975,6 +984,11 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         <p className={styles.cardSub}>Configure your project step by step</p>
       </div>
 
+      {/* HELPER TEXT */}
+      <div className={styles.helperText}>
+        💡 Click on any completed step below to review or modify it. Complete the current step to continue.
+      </div>
+
       {/* STICKY PROGRESS TRACKER */}
       <ProgressTracker
         sections={sections}
@@ -988,7 +1002,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         <SpecificationsSummary
           form={form}
           specs={specs}
-          onEdit={() => setActiveSection('dimensions')}
+          onEdit={(section) => setActiveSection(section || 'dimensions')}
           QUALITY_TIERS={QUALITY_TIERS}
           FOUNDATION_TYPES={FOUNDATION_TYPES}
           WALL_TYPES={WALL_TYPES}
