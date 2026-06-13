@@ -513,6 +513,431 @@ function exportCSV(form, phases, grandTotal, specs) {
   a.click(); URL.revokeObjectURL(url);
 }
 
+// ── Popular Building Types (6-8 most commonly selected)
+const POPULAR_BUILDING_TYPES = [
+  { id: 'bungalow', label: 'Bungalow', emoji: '🏠', categoryId: 'residential' },
+  { id: 'duplex', label: 'Duplex', emoji: '🏡', categoryId: 'residential' },
+  { id: 'terrace', label: 'Terrace House', emoji: '🏘️', categoryId: 'residential' },
+  { id: 'office', label: 'Office Building', emoji: '🏢', categoryId: 'commercial' },
+  { id: 'retail', label: 'Retail / Shop', emoji: '🛍️', categoryId: 'commercial' },
+  { id: 'warehouse', label: 'Warehouse', emoji: '🏭', categoryId: 'industrial' },
+  { id: 'school', label: 'School Building', emoji: '🏫', categoryId: 'institutional' },
+  { id: 'hotel', label: 'Hotel / Guest House', emoji: '🏨', categoryId: 'commercial' },
+];
+
+// ── Browse All Modal Component ──────────────────────────────────────────
+function BrowseAllModal({ isOpen, onClose, BUILDING_CATEGORIES, onSelectType, selectedTypeId, styles }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [expandedCategories, setExpandedCategories] = useState({});
+
+  if (!isOpen) return null;
+
+  const allTypes = BUILDING_CATEGORIES.flatMap(cat =>
+    cat.types.map(type => ({ ...type, categoryId: cat.id, categoryIcon: cat.icon, categoryLabel: cat.label }))
+  );
+
+  const filteredCategories = searchTerm
+    ? BUILDING_CATEGORIES.map(cat => ({
+        ...cat,
+        types: cat.types.filter(type =>
+          type.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          type.desc.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+      })).filter(cat => cat.types.length > 0)
+    : BUILDING_CATEGORIES;
+
+  const toggleCategory = (catId) => {
+    setExpandedCategories(prev => ({ ...prev, [catId]: !prev[catId] }));
+  };
+
+  const handleSelectType = (type) => {
+    onSelectType(type);
+    onClose();
+  };
+
+  return (
+    <>
+      <div className={styles.modalBackdrop} onClick={onClose} />
+      <div className={styles.browseAllModal}>
+        <div className={styles.modalHeader}>
+          <h2 className={styles.modalTitle}>Building Types</h2>
+          <button className={styles.modalCloseBtn} onClick={onClose}>✕</button>
+        </div>
+
+        <div className={styles.modalSearchContainer}>
+          <input
+            className={styles.modalSearchInput}
+            type="text"
+            placeholder="Search building types..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        <div className={styles.modalContent}>
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map(category => (
+              <div key={category.id} className={styles.categorySection}>
+                <button
+                  className={styles.categoryHeader}
+                  onClick={() => toggleCategory(category.id)}>
+                  <span className={styles.categoryHeaderText}>
+                    {category.icon} {category.label}
+                  </span>
+                  <span className={styles.categoryChevron}>
+                    {expandedCategories[category.id] ? '▼' : '▶'}
+                  </span>
+                </button>
+                {expandedCategories[category.id] && (
+                  <div className={styles.categoryTypes}>
+                    {category.types.map(type => (
+                      <button
+                        key={type.id}
+                        className={`${styles.typeOption} ${selectedTypeId === type.id ? styles.typeOptionSelected : ''}`}
+                        onClick={() => handleSelectType(type)}>
+                        <span className={styles.typeOptionEmoji}>{type.emoji}</span>
+                        <div className={styles.typeOptionContent}>
+                          <div className={styles.typeOptionName}>{type.label}</div>
+                          <div className={styles.typeOptionDesc}>{type.desc}</div>
+                        </div>
+                        {selectedTypeId === type.id && (
+                          <span className={styles.typeOptionCheck}>✓</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className={styles.noResults}>No building types match your search</div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Building Type Step Component (Refactored) ──────────────────────────────
+function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES, styles }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [showBrowseModal, setShowBrowseModal] = useState(false);
+
+  const allTypes = BUILDING_CATEGORIES.flatMap(cat =>
+    cat.types.map(type => ({ ...type, categoryId: cat.id }))
+  );
+
+  const filteredTypes = searchTerm.trim() ? allTypes.filter(type =>
+    type.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    type.desc.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : [];
+
+  const selectedType = form.buildingType ? allTypes.find(t => t.id === form.buildingType) : null;
+
+  const selectType = (type) => {
+    setF('buildingType', type.id);
+    setF('customBuildingDesc', '');
+    setF('floors', type.floors);
+    setF('area', type.area);
+    setF('quality', type.quality);
+    setSearchTerm('');
+    setShowSearchResults(false);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    setShowSearchResults(value.trim().length > 0);
+  };
+
+  const clearSelection = () => {
+    setF('buildingType', '');
+  };
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <h2 className={styles.cardTitle}>What Do You Want to Build?</h2>
+        <p className={styles.cardSub}>Describe your custom project or select from pre-defined building types</p>
+      </div>
+
+      {/* CUSTOM PROJECT SECTION — UNCHANGED */}
+      <div className={styles.sectionLabel}>✏️ Describe Your Custom Project</div>
+      <div className={styles.customBox}>
+        <label className={styles.label}>Tell us about your project</label>
+        <textarea className={styles.textarea}
+          placeholder="e.g. I want to build a 4-storey office complex with modern finishes, basement parking, and rooftop garden..."
+          value={form.customBuildingDesc} onChange={e => { setF('customBuildingDesc', e.target.value); setF('buildingType', ''); }} />
+      </div>
+
+      {/* SMART SEARCH */}
+      <div className={styles.sectionLabel} style={{ marginTop: 32 }}>🔍 Or Select Pre-Defined Type</div>
+      <div className={styles.smartSearchContainer}>
+        <input
+          className={styles.smartSearchInput}
+          type="text"
+          placeholder="Search building types..."
+          value={searchTerm}
+          onChange={e => handleSearchChange(e.target.value)}
+          onFocus={() => searchTerm.trim().length > 0 && setShowSearchResults(true)}
+        />
+        {showSearchResults && filteredTypes.length > 0 && (
+          <div className={styles.smartSearchResults}>
+            {filteredTypes.map(type => (
+              <button
+                key={type.id}
+                className={styles.smartSearchResultItem}
+                onClick={() => selectType(type)}>
+                <div className={styles.smartSearchResultEmoji}>{type.emoji}</div>
+                <div className={styles.smartSearchResultContent}>
+                  <div className={styles.smartSearchResultName}>{type.label}</div>
+                  <div className={styles.smartSearchResultDesc}>{type.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* SELECTED TYPE SUMMARY */}
+      {selectedType && (
+        <div className={styles.selectedTypeSummary}>
+          <div className={styles.selectedTypeContent}>
+            <span className={styles.selectedTypeEmoji}>{selectedType.emoji}</span>
+            <div className={styles.selectedTypeInfo}>
+              <div className={styles.selectedTypeName}>{selectedType.label}</div>
+              <div className={styles.selectedTypeHint}>Selected • {selectedType.floors} floor{Number(selectedType.floors) !== 1 ? 's' : ''} • {selectedType.area}m²</div>
+            </div>
+          </div>
+          <button className={styles.selectedTypeChangeBtn} onClick={clearSelection}>Change</button>
+        </div>
+      )}
+
+      {/* POPULAR BUILDING TYPES */}
+      {!selectedType && (
+        <>
+          <div className={styles.sectionLabel} style={{ marginTop: 28 }}>Popular Options</div>
+          <div className={styles.popularTypesGrid}>
+            {POPULAR_BUILDING_TYPES.map(popType => {
+              const fullType = allTypes.find(t => t.id === popType.id);
+              return (
+                <button
+                  key={popType.id}
+                  className={styles.popularTypeCard}
+                  onClick={() => selectType(fullType)}>
+                  <div className={styles.popularTypeEmoji}>{popType.emoji}</div>
+                  <div className={styles.popularTypeName}>{popType.label}</div>
+                  <div className={styles.popularTypeDesc}>{fullType.desc}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* BROWSE ALL BUTTON */}
+          <button
+            className={styles.browseAllBtn}
+            onClick={() => setShowBrowseModal(true)}>
+            Browse All Building Types
+          </button>
+        </>
+      )}
+
+      {/* BROWSE ALL MODAL */}
+      <BrowseAllModal
+        isOpen={showBrowseModal}
+        onClose={() => setShowBrowseModal(false)}
+        BUILDING_CATEGORIES={BUILDING_CATEGORIES}
+        onSelectType={selectType}
+        selectedTypeId={selectedType?.id}
+        styles={styles}
+      />
+
+      <div className={styles.navRow}>
+        <button className={styles.btnGhost} onClick={back}>← Back</button>
+        <button className={styles.btnPrimary} onClick={next} disabled={!canNext}>Next: Structural Specs →</button>
+      </div>
+    </div>
+  );
+}
+
+// ── Structural Specs Step Component ──────────────────────────────────────
+function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, setSelected, canNext, back, next, QUALITY_TIERS, PHASES, PHASE_GROUPS, FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES, styles }) {
+  const [expandedSpecs, setExpandedSpecs] = useState({
+    foundation: true,
+    wallType: true,
+    slabType: false,
+    roofType: false,
+  });
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <h2 className={styles.cardTitle}>Structural Specifications</h2>
+        <p className={styles.cardSub}>Set your project dimensions and quality first, then configure structural details</p>
+      </div>
+
+      <div className={styles.sectionLabel}>📐 Project Dimensions & Quality (Required)</div>
+      <div className={styles.formGrid}>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Total Floor Area (m²)</label>
+          <input className={styles.input} type="number" min="20" placeholder="e.g. 150"
+            value={form.area} onChange={e => setF('area', e.target.value)} />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Number of Floors</label>
+          <select className={styles.select} value={form.floors} onChange={e => setF('floors', e.target.value)}>
+            {[1,2,3,4,5,6,7,8,9,10].map(n => (
+              <option key={n} value={n}>{n} {n === 1 ? 'Storey' : 'Storeys'}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className={styles.sectionLabel}>⭐ Quality Tier</div>
+      <div className={styles.tierGrid}>
+        {QUALITY_TIERS.map(tier => (
+          <div key={tier.id}
+            className={`${styles.tierCard} ${form.quality === tier.id ? styles.tierCardOn : ''}`}
+            style={form.quality === tier.id ? { borderColor: tier.color } : {}}
+            onClick={() => setF('quality', tier.id)}>
+            {tier.popular && <div className={styles.tierBadge} style={{ background: tier.color }}>POPULAR</div>}
+            <div className={styles.tierIcon}>{tier.icon}</div>
+            <div className={styles.tierName} style={{ color: tier.color }}>{tier.label}</div>
+            <div className={styles.tierDesc}>{tier.desc}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.sectionLabel} style={{ marginTop: 32 }}>🏗️ Structural Details</div>
+
+      <div className={styles.specSection}>
+        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, foundation: !e.foundation }))}>
+          <div className={styles.specSectionTitle}>Foundation Type {expandedSpecs.foundation ? '▼' : '▶'}</div>
+        </button>
+        {expandedSpecs.foundation && (
+          <div className={styles.specGrid}>
+            {FOUNDATION_TYPES.map(f => (
+              <div key={f.id}
+                className={`${styles.specCard} ${specs.foundation === f.id ? styles.specCardOn : ''}`}
+                onClick={() => setSp('foundation', f.id)}>
+                <div className={styles.specIcon}>{f.icon}</div>
+                <div className={styles.specName}>{f.label}</div>
+                <div className={styles.specImage}>{f.image}</div>
+                <div className={styles.specUse}>{f.use}</div>
+                <div className={styles.specMult} style={{ color: f.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                  {f.mult > 1 ? `+${Math.round((f.mult - 1) * 100)}% cost` : 'Base cost'}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.specSection}>
+        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, wallType: !e.wallType }))}>
+          <div className={styles.specSectionTitle}>Wall Type {expandedSpecs.wallType ? '▼' : '▶'}</div>
+        </button>
+        {expandedSpecs.wallType && (
+          <div className={styles.specGrid}>
+            {WALL_TYPES.map(w => (
+              <div key={w.id}
+                className={`${styles.specCard} ${specs.wallType === w.id ? styles.specCardOn : ''}`}
+                onClick={() => setSp('wallType', w.id)}>
+                <div className={styles.specIcon}>{w.icon}</div>
+                <div className={styles.specName}>{w.label}</div>
+                <div className={styles.specImage}>{w.image}</div>
+                <div className={styles.specUse}>{w.use}</div>
+                <div className={styles.specMult} style={{ color: w.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                  {w.mult > 1 ? `+${Math.round((w.mult - 1) * 100)}% cost` : w.mult < 1 ? `-${Math.round((1 - w.mult) * 100)}% cost` : 'Base cost'}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.specSection}>
+        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, slabType: !e.slabType }))}>
+          <div className={styles.specSectionTitle}>Slab Type (for multi-storey) {expandedSpecs.slabType ? '▼' : '▶'}</div>
+        </button>
+        {expandedSpecs.slabType && (
+          <div className={styles.specGrid}>
+            {SLAB_TYPES.map(s => (
+              <div key={s.id}
+                className={`${styles.specCard} ${specs.slabType === s.id ? styles.specCardOn : ''}`}
+                onClick={() => setSp('slabType', s.id)}>
+                <div className={styles.specIcon}>{s.icon}</div>
+                <div className={styles.specName}>{s.label}</div>
+                <div className={styles.specImage}>{s.image}</div>
+                <div className={styles.specUse}>{s.use}</div>
+                <div className={styles.specMult} style={{ color: s.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                  {s.mult > 1 ? `+${Math.round((s.mult - 1) * 100)}% cost` : s.mult < 1 ? `-${Math.round((1 - s.mult) * 100)}% cost` : 'Base cost'}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.specSection}>
+        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, roofType: !e.roofType }))}>
+          <div className={styles.specSectionTitle}>Roof Type {expandedSpecs.roofType ? '▼' : '▶'}</div>
+        </button>
+        {expandedSpecs.roofType && (
+          <div className={styles.specGrid}>
+            {ROOF_TYPES.map(r => (
+              <div key={r.id}
+                className={`${styles.specCard} ${specs.roofType === r.id ? styles.specCardOn : ''}`}
+                onClick={() => setSp('roofType', r.id)}>
+                <div className={styles.specIcon}>{r.icon}</div>
+                <div className={styles.specName}>{r.label}</div>
+                <div className={styles.specImage}>{r.image}</div>
+                <div className={styles.specUse}>{r.use}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.sectionLabel} style={{ marginTop: 32 }}>✅ Select Work Phases</div>
+      {PHASE_GROUPS.map(group => {
+        const groupPhases = PHASES.filter(p => p.group === group.id);
+        return (
+          <div key={group.id} className={styles.phaseGroup}>
+            <div className={styles.phaseGroupLabel} style={{ borderColor: group.color }}>
+              <span className={styles.phaseGroupDot} style={{ background: group.color }} />
+              {group.label}
+            </div>
+            <div className={styles.phaseGrid}>
+              {groupPhases.map(ph => {
+                const isOn = selected.includes(ph.id);
+                const disabled = (ph.id === 'decking' || ph.id === 'staircase') && Number(form.floors) === 1;
+                return (
+                  <div key={ph.id}
+                    className={`${styles.phaseCard} ${isOn ? styles.phaseCardOn : ''} ${disabled ? styles.phaseCardDisabled : ''}`}
+                    style={isOn ? { borderColor: group.color } : {}}
+                    onClick={() => !disabled && togglePhase(ph.id)}>
+                    <div className={styles.phaseCheck}>{isOn ? '✓' : ''}</div>
+                    <div className={styles.phaseIcon}>{ph.icon}</div>
+                    <div className={styles.phaseName}>{ph.label}</div>
+                    {disabled && <div className={styles.phaseDisabledTag}>N/A</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      <div className={styles.navRow}>
+        <button className={styles.btnGhost} onClick={back}>← Back</button>
+        <button className={styles.btnPrimary} onClick={next} disabled={!canNext}>Next: 3D Preview →</button>
+      </div>
+    </div>
+  );
+}
+
 // ── Step Indicator ───────────────────────────────────────────────────────
 const STEP_LABELS = [
   { n: 1, label: 'Welcome' },
@@ -683,192 +1108,25 @@ export default function Estimator() {
 
           {/* ════ STEP 3 — BUILDING TYPE ════ */}
           {step === 3 && (
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>What Do You Want to Build?</h2>
-                <p className={styles.cardSub}>Choose from pre-defined types or describe your custom project</p>
-              </div>
-
-              {BUILDING_CATEGORIES.map(category => (
-                <div key={category.id}>
-                  <div className={styles.sectionLabel}>{category.icon} {category.label}</div>
-                  <div className={styles.typeGrid}>
-                    {category.types.map(type => (
-                      <div key={type.id}
-                        className={`${styles.typeCard} ${form.buildingType === type.id ? styles.typeCardOn : ''}`}
-                        onClick={() => { setF('buildingType', type.id); setF('customBuildingDesc', ''); setF('floors', type.floors); setF('area', type.area); setF('quality', type.quality); }}>
-                        <div className={styles.typeEmoji}>{type.emoji}</div>
-                        <div className={styles.typeName}>{type.label}</div>
-                        <div className={styles.typeDesc}>{type.desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              <div className={styles.sectionLabel} style={{ marginTop: 24 }}>✏️ Custom Project</div>
-              <div className={styles.customBox}>
-                <label className={styles.label}>Describe your project</label>
-                <textarea className={styles.textarea}
-                  placeholder="e.g. I want to build a 4-storey office complex with modern finishes, basement parking, and rooftop garden..."
-                  value={form.customBuildingDesc} onChange={e => { setF('customBuildingDesc', e.target.value); setF('buildingType', ''); }} />
-              </div>
-
-              <div className={styles.navRow}>
-                <button className={styles.btnGhost} onClick={back}>← Back</button>
-                <button className={styles.btnPrimary} onClick={next} disabled={!canNext3}>Next: Structural Specs →</button>
-              </div>
-            </div>
+            <BuildingTypeStep
+              form={form} setF={setF} canNext={canNext3}
+              back={back} next={next}
+              BUILDING_CATEGORIES={BUILDING_CATEGORIES}
+              styles={styles}
+            />
           )}
 
           {/* ════ STEP 4 — STRUCTURAL SPECS ════ */}
           {step === 4 && (
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <h2 className={styles.cardTitle}>Structural Specifications</h2>
-                <p className={styles.cardSub}>Choose the right foundation, walls, slabs, and roof for your building</p>
-              </div>
-
-              <div className={styles.specSection}>
-                <div className={styles.specSectionTitle}>Foundation Type</div>
-                <div className={styles.specGrid}>
-                  {FOUNDATION_TYPES.map(f => (
-                    <div key={f.id}
-                      className={`${styles.specCard} ${specs.foundation === f.id ? styles.specCardOn : ''}`}
-                      onClick={() => setSp('foundation', f.id)}>
-                      <div className={styles.specIcon}>{f.icon}</div>
-                      <div className={styles.specName}>{f.label}</div>
-                      <div className={styles.specImage}>{f.image}</div>
-                      <div className={styles.specUse}>{f.use}</div>
-                      <div className={styles.specMult} style={{ color: f.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                        {f.mult > 1 ? `+${Math.round((f.mult - 1) * 100)}% cost` : 'Base cost'}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.specSection}>
-                <div className={styles.specSectionTitle}>Wall Type</div>
-                <div className={styles.specGrid}>
-                  {WALL_TYPES.map(w => (
-                    <div key={w.id}
-                      className={`${styles.specCard} ${specs.wallType === w.id ? styles.specCardOn : ''}`}
-                      onClick={() => setSp('wallType', w.id)}>
-                      <div className={styles.specIcon}>{w.icon}</div>
-                      <div className={styles.specName}>{w.label}</div>
-                      <div className={styles.specImage}>{w.image}</div>
-                      <div className={styles.specUse}>{w.use}</div>
-                      <div className={styles.specMult} style={{ color: w.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                        {w.mult > 1 ? `+${Math.round((w.mult - 1) * 100)}% cost` : w.mult < 1 ? `-${Math.round((1 - w.mult) * 100)}% cost` : 'Base cost'}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.specSection}>
-                <div className={styles.specSectionTitle}>Slab Type (for multi-storey)</div>
-                <div className={styles.specGrid}>
-                  {SLAB_TYPES.map(s => (
-                    <div key={s.id}
-                      className={`${styles.specCard} ${specs.slabType === s.id ? styles.specCardOn : ''}`}
-                      onClick={() => setSp('slabType', s.id)}>
-                      <div className={styles.specIcon}>{s.icon}</div>
-                      <div className={styles.specName}>{s.label}</div>
-                      <div className={styles.specImage}>{s.image}</div>
-                      <div className={styles.specUse}>{s.use}</div>
-                      <div className={styles.specMult} style={{ color: s.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                        {s.mult > 1 ? `+${Math.round((s.mult - 1) * 100)}% cost` : s.mult < 1 ? `-${Math.round((1 - s.mult) * 100)}% cost` : 'Base cost'}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.specSection}>
-                <div className={styles.specSectionTitle}>Roof Type</div>
-                <div className={styles.specGrid}>
-                  {ROOF_TYPES.map(r => (
-                    <div key={r.id}
-                      className={`${styles.specCard} ${specs.roofType === r.id ? styles.specCardOn : ''}`}
-                      onClick={() => setSp('roofType', r.id)}>
-                      <div className={styles.specIcon}>{r.icon}</div>
-                      <div className={styles.specName}>{r.label}</div>
-                      <div className={styles.specImage}>{r.image}</div>
-                      <div className={styles.specUse}>{r.use}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.sectionLabel} style={{ marginTop: 24 }}>Project Dimensions & Quality</div>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Total Floor Area (m²)</label>
-                  <input className={styles.input} type="number" min="20" placeholder="e.g. 150"
-                    value={form.area} onChange={e => setF('area', e.target.value)} />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Number of Floors</label>
-                  <select className={styles.select} value={form.floors} onChange={e => setF('floors', e.target.value)}>
-                    {[1,2,3,4,5,6,7,8,9,10].map(n => (
-                      <option key={n} value={n}>{n} {n === 1 ? 'Storey' : 'Storeys'}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className={styles.sectionLabel}>Quality Tier</div>
-              <div className={styles.tierGrid}>
-                {QUALITY_TIERS.map(tier => (
-                  <div key={tier.id}
-                    className={`${styles.tierCard} ${form.quality === tier.id ? styles.tierCardOn : ''}`}
-                    style={form.quality === tier.id ? { borderColor: tier.color } : {}}
-                    onClick={() => setF('quality', tier.id)}>
-                    {tier.popular && <div className={styles.tierBadge} style={{ background: tier.color }}>POPULAR</div>}
-                    <div className={styles.tierIcon}>{tier.icon}</div>
-                    <div className={styles.tierName} style={{ color: tier.color }}>{tier.label}</div>
-                    <div className={styles.tierDesc}>{tier.desc}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className={styles.sectionLabel}>Select Work Phases</div>
-              {PHASE_GROUPS.map(group => {
-                const groupPhases = PHASES.filter(p => p.group === group.id);
-                return (
-                  <div key={group.id} className={styles.phaseGroup}>
-                    <div className={styles.phaseGroupLabel} style={{ borderColor: group.color }}>
-                      <span className={styles.phaseGroupDot} style={{ background: group.color }} />
-                      {group.label}
-                    </div>
-                    <div className={styles.phaseGrid}>
-                      {groupPhases.map(ph => {
-                        const isOn = selected.includes(ph.id);
-                        const disabled = (ph.id === 'decking' || ph.id === 'staircase') && Number(form.floors) === 1;
-                        return (
-                          <div key={ph.id}
-                            className={`${styles.phaseCard} ${isOn ? styles.phaseCardOn : ''} ${disabled ? styles.phaseCardDisabled : ''}`}
-                            style={isOn ? { borderColor: group.color } : {}}
-                            onClick={() => !disabled && togglePhase(ph.id)}>
-                            <div className={styles.phaseCheck}>{isOn ? '✓' : ''}</div>
-                            <div className={styles.phaseIcon}>{ph.icon}</div>
-                            <div className={styles.phaseName}>{ph.label}</div>
-                            {disabled && <div className={styles.phaseDisabledTag}>N/A</div>}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-
-              <div className={styles.navRow}>
-                <button className={styles.btnGhost} onClick={back}>← Back</button>
-                <button className={styles.btnPrimary} onClick={next} disabled={!canNext4}>Next: 3D Preview →</button>
-              </div>
-            </div>
+            <StructuralSpecsStep
+              form={form} setF={setF} specs={specs} setSp={setSp}
+              selected={selected} togglePhase={togglePhase} setSelected={setSelected}
+              canNext={canNext4} back={back} next={next}
+              QUALITY_TIERS={QUALITY_TIERS} PHASES={PHASES} PHASE_GROUPS={PHASE_GROUPS}
+              FOUNDATION_TYPES={FOUNDATION_TYPES} WALL_TYPES={WALL_TYPES}
+              SLAB_TYPES={SLAB_TYPES} ROOF_TYPES={ROOF_TYPES}
+              styles={styles}
+            />
           )}
 
           {/* ════ STEP 5 — 3D PREVIEW ════ */}
