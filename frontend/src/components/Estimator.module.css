@@ -1480,6 +1480,386 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
+/* PROGRESSIVE SPECIFICATION STEP */
+/* ─────────────────────────────────────────────────────────────────────────────────────── */
+
+/* PROGRESS TRACKER */
+.progressTracker {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-default);
+  padding: 0;
+  margin: -40px -40px 28px -40px;
+  overflow-x: auto;
+}
+
+.progressTrackerContent {
+  display: flex;
+  gap: 0;
+  padding: 12px 40px;
+  min-width: min-content;
+}
+
+.progressStep {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+  position: relative;
+}
+
+.progressStep:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.progressStep:not(:disabled):hover {
+  background: rgba(29,158,117,0.05);
+  border-radius: 6px;
+}
+
+.progressStepDot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.1);
+  color: var(--text-muted);
+  border: 1.5px solid rgba(255,255,255,0.15);
+}
+
+.progressStepActive .progressStepDot {
+  background: var(--accent-default);
+  color: #fff;
+  border-color: var(--accent-default);
+  box-shadow: 0 0 0 4px rgba(29,158,117,0.2);
+}
+
+.progressStepDone .progressStepDot {
+  background: var(--success-default);
+  color: #fff;
+  border-color: var(--success-default);
+}
+
+.progressStepLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.progressStepActive .progressStepLabel {
+  color: var(--accent-default);
+  font-weight: 700;
+}
+
+.progressStepDone .progressStepLabel {
+  color: var(--success-default);
+}
+
+/* PROGRESSIVE CONTENT LAYOUT */
+.progressiveContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* SUMMARY SECTION CARD */
+.summarySectionCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(29,158,117,0.06);
+  border: 1.5px solid rgba(29,158,117,0.15);
+  border-radius: 10px;
+  padding: 16px;
+  gap: 12px;
+}
+
+.summarySectionContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.summarySectionIcon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.summarySectionTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.summarySectionValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.summarySectionEditBtn {
+  background: var(--accent-default);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+.summarySectionEditBtn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* ACTIVE SECTION */
+.activeSection {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1.5px solid rgba(29,158,117,0.2);
+  border-radius: 12px;
+  padding: 28px;
+  animation: slideInSection 0.3s ease;
+}
+
+@keyframes slideInSection {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activeSectionTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+}
+
+.activeSectionContinueBtn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent-default);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  margin-top: 24px;
+}
+
+.activeSectionContinueBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.activeSectionContinueBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* RECOMMENDATION CARD */
+.recommendationCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(29,158,117,0.1) 0%, rgba(29,158,117,0.05) 100%);
+  border: 1.5px solid rgba(29,158,117,0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.recommendationStar {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.recommendationLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.recommendationValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-default);
+}
+
+/* PHASE GROUPS COLLAPSIBLE */
+.phasesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phaseGroupCollapsible {
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.phaseGroupCollapsibleHeader {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.phaseGroupCollapsibleHeader:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.phaseGroupCollapsibleTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  text-align: left;
+}
+
+.phaseGroupCollapsibleDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.phaseGroupCollapsibleCount {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.phaseGroupCollapsibleChevron {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.phaseGroupCollapsibleContent {
+  background: rgba(255,255,255,0.02);
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* PHASE ITEM */
+.phaseItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: left;
+  outline: none;
+}
+
+.phaseItem:hover:not(:disabled) {
+  background: rgba(29,158,117,0.1);
+}
+
+.phaseItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.phaseItemOn {
+  background: rgba(29,158,117,0.15);
+}
+
+.phaseItemDisabled {
+  opacity: 0.5;
+}
+
+.phaseItemCheck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(29,158,117,0.3);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-default);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.phaseItemOn .phaseItemCheck {
+  background: var(--accent-default);
+  border-color: var(--accent-default);
+  color: #fff;
+}
+
+.phaseItemIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.phaseItemLabel {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.phaseItemDisabledTag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────────────── */
 .exportRow {
   display: flex;
   gap: 12px;
@@ -1508,7 +1888,8 @@
   }
 
   .specGrid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
   }
 
   .tierGrid {
@@ -1601,5 +1982,86 @@
 
   .typeOptionDesc {
     font-size: 0.75rem;
+  }
+
+  /* Progressive Specification Step Mobile */
+  .progressTracker {
+    margin: -24px -24px 20px -24px;
+    padding: 0;
+  }
+
+  .progressTrackerContent {
+    padding: 10px 20px;
+    gap: 0;
+  }
+
+  .progressStep {
+    padding: 6px 8px;
+    gap: 4px;
+  }
+
+  .progressStepLabel {
+    font-size: 0.7rem;
+  }
+
+  .summarySectionCard {
+    padding: 12px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .summarySectionContent {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .summarySectionEditBtn {
+    width: 100%;
+  }
+
+  .activeSection {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .activeSectionTitle {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tierGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendationCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .phaseGroupCollapsibleHeader {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .phaseGroupCollapsibleTitle {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .phaseItem {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .phaseItemIcon {
+    font-size: 1rem;
+  }
+
+  .phaseItemLabel {
+    font-size: 0.85rem;
   }
 }

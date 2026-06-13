@@ -762,173 +762,427 @@ function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES
 }
 
 // ── Structural Specs Step Component ──────────────────────────────────────
+// ── Helper: Get recommended option based on building type and quality
+function getRecommendation(selectedType, quality, optionType, FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES) {
+  if (!selectedType) return null;
+
+  const isResidential = selectedType.categoryId === 'residential';
+  const isPremium = quality === 'premium';
+
+  if (optionType === 'foundation') {
+    if (isPremium) return FOUNDATION_TYPES.find(f => f.id === 'raft');
+    if (isResidential) return FOUNDATION_TYPES.find(f => f.id === 'strip');
+    return FOUNDATION_TYPES.find(f => f.id === 'strip');
+  }
+
+  if (optionType === 'wall') {
+    if (isPremium) return WALL_TYPES.find(w => w.id === 'brick');
+    if (isResidential) return WALL_TYPES.find(w => w.id === 'sandcrete9');
+    return WALL_TYPES.find(w => w.id === 'sandcrete9');
+  }
+
+  if (optionType === 'slab') {
+    if (isPremium) return SLAB_TYPES.find(s => s.id === 'solid');
+    return SLAB_TYPES.find(s => s.id === 'hollow');
+  }
+
+  if (optionType === 'roof') {
+    if (isPremium) return ROOF_TYPES.find(r => r.id === 'flat');
+    return ROOF_TYPES.find(r => r.id === 'hip');
+  }
+
+  return null;
+}
+
+// ── Summary Card Component ──────────────────────────────────────────────────
+function SummarySectionCard({ title, value, icon, onEdit, styles }) {
+  return (
+    <div className={styles.summarySectionCard}>
+      <div className={styles.summarySectionContent}>
+        {icon && <span className={styles.summarySectionIcon}>{icon}</span>}
+        <div>
+          <div className={styles.summarySectionTitle}>{title}</div>
+          <div className={styles.summarySectionValue}>{value}</div>
+        </div>
+      </div>
+      <button className={styles.summarySectionEditBtn} onClick={onEdit}>Edit</button>
+    </div>
+  );
+}
+
+// ── Progress Tracker Component ──────────────────────────────────────────────
+function ProgressTracker({ sections, activeSection, onSelectSection, styles }) {
+  return (
+    <div className={styles.progressTracker}>
+      <div className={styles.progressTrackerContent}>
+        {sections.map(section => (
+          <button
+            key={section.id}
+            className={`${styles.progressStep} ${activeSection === section.id ? styles.progressStepActive : ''} ${section.completed ? styles.progressStepDone : ''}`}
+            onClick={() => section.completed && onSelectSection(section.id)}
+            disabled={!section.completed && activeSection !== section.id}>
+            <span className={styles.progressStepDot}>{section.completed ? '✓' : section.number}</span>
+            <span className={styles.progressStepLabel}>{section.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Structural Specs Step Component (Completely Redesigned) ────────────────
 function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, setSelected, canNext, back, next, QUALITY_TIERS, PHASES, PHASE_GROUPS, FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES, styles }) {
-  const [expandedSpecs, setExpandedSpecs] = useState({
-    foundation: true,
-    wallType: true,
-    slabType: false,
-    roofType: false,
-  });
+  const [activeSection, setActiveSection] = useState('dimensions');
+  const [expandedPhaseGroups, setExpandedPhaseGroups] = useState({});
+
+  const floors = Number(form.floors) || 1;
+  const needsSlab = floors > 1;
+  const allTypes = BUILDING_CATEGORIES.flatMap(cat => cat.types.map(type => ({ ...type, categoryId: cat.id })));
+  const selectedType = form.buildingType ? allTypes.find(t => t.id === form.buildingType) : null;
+
+  const sections = [
+    { id: 'dimensions', number: 1, label: 'Dimensions', completed: !!form.area && !!form.floors },
+    { id: 'quality', number: 2, label: 'Quality', completed: !!form.quality },
+    { id: 'foundation', number: 3, label: 'Foundation', completed: !!specs.foundation },
+    { id: 'wall', number: 4, label: 'Wall', completed: !!specs.wallType },
+    ...(needsSlab ? [{ id: 'slab', number: 5, label: 'Slab', completed: !!specs.slabType }] : []),
+    { id: 'roof', number: needsSlab ? 6 : 5, label: 'Roof', completed: !!specs.roofType },
+    { id: 'phases', number: needsSlab ? 7 : 6, label: 'Work Phases', completed: selected.length > 0 },
+  ];
+
+  const autoExpandNextSection = (completedId) => {
+    const currentIndex = sections.findIndex(s => s.id === completedId);
+    if (currentIndex < sections.length - 1) {
+      setActiveSection(sections[currentIndex + 1].id);
+    }
+  };
+
+  const handleDimensionsChange = (key, value) => {
+    setF(key, value);
+  };
+
+  const handleDimensionsDone = () => {
+    if (form.area && form.floors) {
+      autoExpandNextSection('dimensions');
+    }
+  };
+
+  const handleQualitySelect = (qualityId) => {
+    setF('quality', qualityId);
+    autoExpandNextSection('quality');
+  };
+
+  const handleSpecSelect = (specKey, specId) => {
+    setSp(specKey, specId);
+    autoExpandNextSection(specKey);
+  };
+
+  const handlePhaseToggle = (phaseId) => {
+    togglePhase(phaseId);
+  };
+
+  const togglePhaseGroup = (groupId) => {
+    setExpandedPhaseGroups(prev => ({ ...prev, [groupId]: !prev[groupId] }));
+  };
 
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
         <h2 className={styles.cardTitle}>Structural Specifications</h2>
-        <p className={styles.cardSub}>Set your project dimensions and quality first, then configure structural details</p>
+        <p className={styles.cardSub}>Configure your project step by step</p>
       </div>
 
-      <div className={styles.sectionLabel}>📐 Project Dimensions & Quality (Required)</div>
-      <div className={styles.formGrid}>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Total Floor Area (m²)</label>
-          <input className={styles.input} type="number" min="20" placeholder="e.g. 150"
-            value={form.area} onChange={e => setF('area', e.target.value)} />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Number of Floors</label>
-          <select className={styles.select} value={form.floors} onChange={e => setF('floors', e.target.value)}>
-            {[1,2,3,4,5,6,7,8,9,10].map(n => (
-              <option key={n} value={n}>{n} {n === 1 ? 'Storey' : 'Storeys'}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      {/* STICKY PROGRESS TRACKER */}
+      <ProgressTracker
+        sections={sections}
+        activeSection={activeSection}
+        onSelectSection={id => sections.find(s => s.id === id).completed && setActiveSection(id)}
+        styles={styles}
+      />
 
-      <div className={styles.sectionLabel}>⭐ Quality Tier</div>
-      <div className={styles.tierGrid}>
-        {QUALITY_TIERS.map(tier => (
-          <div key={tier.id}
-            className={`${styles.tierCard} ${form.quality === tier.id ? styles.tierCardOn : ''}`}
-            style={form.quality === tier.id ? { borderColor: tier.color } : {}}
-            onClick={() => setF('quality', tier.id)}>
-            {tier.popular && <div className={styles.tierBadge} style={{ background: tier.color }}>POPULAR</div>}
-            <div className={styles.tierIcon}>{tier.icon}</div>
-            <div className={styles.tierName} style={{ color: tier.color }}>{tier.label}</div>
-            <div className={styles.tierDesc}>{tier.desc}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.sectionLabel} style={{ marginTop: 32 }}>🏗️ Structural Details</div>
-
-      <div className={styles.specSection}>
-        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, foundation: !e.foundation }))}>
-          <div className={styles.specSectionTitle}>Foundation Type {expandedSpecs.foundation ? '▼' : '▶'}</div>
-        </button>
-        {expandedSpecs.foundation && (
-          <div className={styles.specGrid}>
-            {FOUNDATION_TYPES.map(f => (
-              <div key={f.id}
-                className={`${styles.specCard} ${specs.foundation === f.id ? styles.specCardOn : ''}`}
-                onClick={() => setSp('foundation', f.id)}>
-                <div className={styles.specIcon}>{f.icon}</div>
-                <div className={styles.specName}>{f.label}</div>
-                <div className={styles.specImage}>{f.image}</div>
-                <div className={styles.specUse}>{f.use}</div>
-                <div className={styles.specMult} style={{ color: f.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                  {f.mult > 1 ? `+${Math.round((f.mult - 1) * 100)}% cost` : 'Base cost'}
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* COMPLETED SECTIONS — SUMMARY CARDS */}
+      <div className={styles.progressiveContent}>
+        {form.area && form.floors && activeSection !== 'dimensions' && (
+          <SummarySectionCard
+            title="Project Dimensions"
+            value={`${form.area}m² • ${form.floors} floor${floors !== 1 ? 's' : ''}`}
+            icon="📐"
+            onEdit={() => setActiveSection('dimensions')}
+            styles={styles}
+          />
         )}
-      </div>
 
-      <div className={styles.specSection}>
-        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, wallType: !e.wallType }))}>
-          <div className={styles.specSectionTitle}>Wall Type {expandedSpecs.wallType ? '▼' : '▶'}</div>
-        </button>
-        {expandedSpecs.wallType && (
-          <div className={styles.specGrid}>
-            {WALL_TYPES.map(w => (
-              <div key={w.id}
-                className={`${styles.specCard} ${specs.wallType === w.id ? styles.specCardOn : ''}`}
-                onClick={() => setSp('wallType', w.id)}>
-                <div className={styles.specIcon}>{w.icon}</div>
-                <div className={styles.specName}>{w.label}</div>
-                <div className={styles.specImage}>{w.image}</div>
-                <div className={styles.specUse}>{w.use}</div>
-                <div className={styles.specMult} style={{ color: w.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                  {w.mult > 1 ? `+${Math.round((w.mult - 1) * 100)}% cost` : w.mult < 1 ? `-${Math.round((1 - w.mult) * 100)}% cost` : 'Base cost'}
-                </div>
-              </div>
-            ))}
-          </div>
+        {form.quality && activeSection !== 'quality' && (
+          <SummarySectionCard
+            title="Quality Tier"
+            value={QUALITY_TIERS.find(q => q.id === form.quality)?.label || form.quality}
+            icon="⭐"
+            onEdit={() => setActiveSection('quality')}
+            styles={styles}
+          />
         )}
-      </div>
 
-      <div className={styles.specSection}>
-        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, slabType: !e.slabType }))}>
-          <div className={styles.specSectionTitle}>Slab Type (for multi-storey) {expandedSpecs.slabType ? '▼' : '▶'}</div>
-        </button>
-        {expandedSpecs.slabType && (
-          <div className={styles.specGrid}>
-            {SLAB_TYPES.map(s => (
-              <div key={s.id}
-                className={`${styles.specCard} ${specs.slabType === s.id ? styles.specCardOn : ''}`}
-                onClick={() => setSp('slabType', s.id)}>
-                <div className={styles.specIcon}>{s.icon}</div>
-                <div className={styles.specName}>{s.label}</div>
-                <div className={styles.specImage}>{s.image}</div>
-                <div className={styles.specUse}>{s.use}</div>
-                <div className={styles.specMult} style={{ color: s.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
-                  {s.mult > 1 ? `+${Math.round((s.mult - 1) * 100)}% cost` : s.mult < 1 ? `-${Math.round((1 - s.mult) * 100)}% cost` : 'Base cost'}
-                </div>
-              </div>
-            ))}
-          </div>
+        {specs.foundation && activeSection !== 'foundation' && (
+          <SummarySectionCard
+            title="Foundation"
+            value={FOUNDATION_TYPES.find(f => f.id === specs.foundation)?.label || specs.foundation}
+            icon="⬇️"
+            onEdit={() => setActiveSection('foundation')}
+            styles={styles}
+          />
         )}
-      </div>
 
-      <div className={styles.specSection}>
-        <button className={styles.specSectionToggle} onClick={() => setExpandedSpecs(e => ({ ...e, roofType: !e.roofType }))}>
-          <div className={styles.specSectionTitle}>Roof Type {expandedSpecs.roofType ? '▼' : '▶'}</div>
-        </button>
-        {expandedSpecs.roofType && (
-          <div className={styles.specGrid}>
-            {ROOF_TYPES.map(r => (
-              <div key={r.id}
-                className={`${styles.specCard} ${specs.roofType === r.id ? styles.specCardOn : ''}`}
-                onClick={() => setSp('roofType', r.id)}>
-                <div className={styles.specIcon}>{r.icon}</div>
-                <div className={styles.specName}>{r.label}</div>
-                <div className={styles.specImage}>{r.image}</div>
-                <div className={styles.specUse}>{r.use}</div>
-              </div>
-            ))}
-          </div>
+        {specs.wallType && activeSection !== 'wall' && (
+          <SummarySectionCard
+            title="Wall Type"
+            value={WALL_TYPES.find(w => w.id === specs.wallType)?.label || specs.wallType}
+            icon="🧱"
+            onEdit={() => setActiveSection('wall')}
+            styles={styles}
+          />
         )}
-      </div>
 
-      <div className={styles.sectionLabel} style={{ marginTop: 32 }}>✅ Select Work Phases</div>
-      {PHASE_GROUPS.map(group => {
-        const groupPhases = PHASES.filter(p => p.group === group.id);
-        return (
-          <div key={group.id} className={styles.phaseGroup}>
-            <div className={styles.phaseGroupLabel} style={{ borderColor: group.color }}>
-              <span className={styles.phaseGroupDot} style={{ background: group.color }} />
-              {group.label}
+        {needsSlab && specs.slabType && activeSection !== 'slab' && (
+          <SummarySectionCard
+            title="Slab Type"
+            value={SLAB_TYPES.find(s => s.id === specs.slabType)?.label || specs.slabType}
+            icon="🏗️"
+            onEdit={() => setActiveSection('slab')}
+            styles={styles}
+          />
+        )}
+
+        {specs.roofType && activeSection !== 'roof' && (
+          <SummarySectionCard
+            title="Roof Type"
+            value={ROOF_TYPES.find(r => r.id === specs.roofType)?.label || specs.roofType}
+            icon="🏠"
+            onEdit={() => setActiveSection('roof')}
+            styles={styles}
+          />
+        )}
+
+        {/* ACTIVE SECTION: PROJECT DIMENSIONS */}
+        {activeSection === 'dimensions' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>📐 Project Dimensions</h3>
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Total Floor Area (m²)</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="20"
+                  placeholder="e.g. 150"
+                  value={form.area}
+                  onChange={e => handleDimensionsChange('area', e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Number of Floors</label>
+                <select
+                  className={styles.select}
+                  value={form.floors}
+                  onChange={e => handleDimensionsChange('floors', e.target.value)}>
+                  {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                    <option key={n} value={n}>{n} {n === 1 ? 'Storey' : 'Storeys'}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className={styles.phaseGrid}>
-              {groupPhases.map(ph => {
-                const isOn = selected.includes(ph.id);
-                const disabled = (ph.id === 'decking' || ph.id === 'staircase') && Number(form.floors) === 1;
+            <button
+              className={styles.activeSectionContinueBtn}
+              onClick={handleDimensionsDone}
+              disabled={!form.area || !form.floors}>
+              Continue →
+            </button>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: QUALITY TIER */}
+        {activeSection === 'quality' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>⭐ Quality Tier</h3>
+            <div className={styles.tierGrid}>
+              {QUALITY_TIERS.map(tier => (
+                <button
+                  key={tier.id}
+                  className={`${styles.tierCard} ${form.quality === tier.id ? styles.tierCardOn : ''}`}
+                  style={form.quality === tier.id ? { borderColor: tier.color } : {}}
+                  onClick={() => handleQualitySelect(tier.id)}>
+                  {tier.popular && <div className={styles.tierBadge} style={{ background: tier.color }}>POPULAR</div>}
+                  <div className={styles.tierIcon}>{tier.icon}</div>
+                  <div className={styles.tierName} style={{ color: tier.color }}>{tier.label}</div>
+                  <div className={styles.tierDesc}>{tier.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: FOUNDATION TYPE */}
+        {activeSection === 'foundation' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>⬇️ Foundation Type</h3>
+            {selectedType && (
+              <div className={styles.recommendationCard}>
+                <span className={styles.recommendationStar}>⭐</span>
+                <div>
+                  <div className={styles.recommendationLabel}>Recommended for {selectedType.label}</div>
+                  <div className={styles.recommendationValue}>
+                    {getRecommendation(selectedType, form.quality, 'foundation', FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES)?.label}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className={styles.specGrid}>
+              {FOUNDATION_TYPES.map(f => (
+                <button
+                  key={f.id}
+                  className={`${styles.specCard} ${specs.foundation === f.id ? styles.specCardOn : ''}`}
+                  onClick={() => handleSpecSelect('foundation', f.id)}>
+                  <div className={styles.specIcon}>{f.icon}</div>
+                  <div className={styles.specName}>{f.label}</div>
+                  <div className={styles.specImage}>{f.image}</div>
+                  <div className={styles.specUse}>{f.use}</div>
+                  <div className={styles.specMult} style={{ color: f.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                    {f.mult > 1 ? `+${Math.round((f.mult - 1) * 100)}% cost` : 'Base cost'}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: WALL TYPE */}
+        {activeSection === 'wall' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>🧱 Wall Type</h3>
+            {selectedType && (
+              <div className={styles.recommendationCard}>
+                <span className={styles.recommendationStar}>⭐</span>
+                <div>
+                  <div className={styles.recommendationLabel}>Recommended for {selectedType.label}</div>
+                  <div className={styles.recommendationValue}>
+                    {getRecommendation(selectedType, form.quality, 'wall', FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES)?.label}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className={styles.specGrid}>
+              {WALL_TYPES.map(w => (
+                <button
+                  key={w.id}
+                  className={`${styles.specCard} ${specs.wallType === w.id ? styles.specCardOn : ''}`}
+                  onClick={() => handleSpecSelect('wallType', w.id)}>
+                  <div className={styles.specIcon}>{w.icon}</div>
+                  <div className={styles.specName}>{w.label}</div>
+                  <div className={styles.specImage}>{w.image}</div>
+                  <div className={styles.specUse}>{w.use}</div>
+                  <div className={styles.specMult} style={{ color: w.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                    {w.mult > 1 ? `+${Math.round((w.mult - 1) * 100)}% cost` : w.mult < 1 ? `-${Math.round((1 - w.mult) * 100)}% cost` : 'Base cost'}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: SLAB TYPE (CONDITIONAL) */}
+        {needsSlab && activeSection === 'slab' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>🏗️ Slab Type</h3>
+            <div className={styles.specGrid}>
+              {SLAB_TYPES.map(s => (
+                <button
+                  key={s.id}
+                  className={`${styles.specCard} ${specs.slabType === s.id ? styles.specCardOn : ''}`}
+                  onClick={() => handleSpecSelect('slabType', s.id)}>
+                  <div className={styles.specIcon}>{s.icon}</div>
+                  <div className={styles.specName}>{s.label}</div>
+                  <div className={styles.specImage}>{s.image}</div>
+                  <div className={styles.specUse}>{s.use}</div>
+                  <div className={styles.specMult} style={{ color: s.mult > 1 ? '#f59e0b' : '#1D9E75' }}>
+                    {s.mult > 1 ? `+${Math.round((s.mult - 1) * 100)}% cost` : s.mult < 1 ? `-${Math.round((1 - s.mult) * 100)}% cost` : 'Base cost'}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: ROOF TYPE */}
+        {activeSection === 'roof' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>🏠 Roof Type</h3>
+            <div className={styles.specGrid}>
+              {ROOF_TYPES.map(r => (
+                <button
+                  key={r.id}
+                  className={`${styles.specCard} ${specs.roofType === r.id ? styles.specCardOn : ''}`}
+                  onClick={() => handleSpecSelect('roofType', r.id)}>
+                  <div className={styles.specIcon}>{r.icon}</div>
+                  <div className={styles.specName}>{r.label}</div>
+                  <div className={styles.specImage}>{r.image}</div>
+                  <div className={styles.specUse}>{r.use}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ACTIVE SECTION: WORK PHASES */}
+        {activeSection === 'phases' && (
+          <div className={styles.activeSection}>
+            <h3 className={styles.activeSectionTitle}>✅ Select Work Phases</h3>
+            <div className={styles.phasesContainer}>
+              {PHASE_GROUPS.map(group => {
+                const groupPhases = PHASES.filter(p => p.group === group.id);
+                const groupIsExpanded = expandedPhaseGroups[group.id];
+                const groupItemsSelected = groupPhases.filter(p => selected.includes(p.id)).length;
+
                 return (
-                  <div key={ph.id}
-                    className={`${styles.phaseCard} ${isOn ? styles.phaseCardOn : ''} ${disabled ? styles.phaseCardDisabled : ''}`}
-                    style={isOn ? { borderColor: group.color } : {}}
-                    onClick={() => !disabled && togglePhase(ph.id)}>
-                    <div className={styles.phaseCheck}>{isOn ? '✓' : ''}</div>
-                    <div className={styles.phaseIcon}>{ph.icon}</div>
-                    <div className={styles.phaseName}>{ph.label}</div>
-                    {disabled && <div className={styles.phaseDisabledTag}>N/A</div>}
+                  <div key={group.id} className={styles.phaseGroupCollapsible}>
+                    <button
+                      className={styles.phaseGroupCollapsibleHeader}
+                      onClick={() => togglePhaseGroup(group.id)}
+                      style={{ borderColor: group.color }}>
+                      <span className={styles.phaseGroupCollapsibleTitle}>
+                        <span className={styles.phaseGroupCollapsibleDot} style={{ background: group.color }} />
+                        {group.label}
+                        <span className={styles.phaseGroupCollapsibleCount}>({groupItemsSelected}/{groupPhases.length})</span>
+                      </span>
+                      <span className={styles.phaseGroupCollapsibleChevron}>
+                        {groupIsExpanded ? '▼' : '▶'}
+                      </span>
+                    </button>
+                    {groupIsExpanded && (
+                      <div className={styles.phaseGroupCollapsibleContent}>
+                        {groupPhases.map(ph => {
+                          const isOn = selected.includes(ph.id);
+                          const disabled = (ph.id === 'decking' || ph.id === 'staircase') && floors === 1;
+                          return (
+                            <button
+                              key={ph.id}
+                              className={`${styles.phaseItem} ${isOn ? styles.phaseItemOn : ''} ${disabled ? styles.phaseItemDisabled : ''}`}
+                              onClick={() => !disabled && handlePhaseToggle(ph.id)}
+                              disabled={disabled}>
+                              <span className={styles.phaseItemCheck}>{isOn ? '✓' : ''}</span>
+                              <span className={styles.phaseItemIcon}>{ph.icon}</span>
+                              <span className={styles.phaseItemLabel}>{ph.label}</span>
+                              {disabled && <span className={styles.phaseItemDisabledTag}>N/A</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           </div>
-        );
-      })}
+        )}
+      </div>
 
       <div className={styles.navRow}>
         <button className={styles.btnGhost} onClick={back}>← Back</button>
