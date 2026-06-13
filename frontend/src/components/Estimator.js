@@ -245,19 +245,38 @@ const ROOF_TYPES = [
 
 // ── Work Phases ──────────────────────────────────────────────────────────
 const PHASES = [
-  { id: 'foundation', icon: '⬇️', label: 'Foundation & Setting Out', group: 'structural' },
-  { id: 'blockwork',  icon: '🧱', label: 'Block Work & Walling',     group: 'structural' },
-  { id: 'decking',    icon: '🏗️', label: 'Decking (Suspended Slab)', group: 'structural' },
-  { id: 'roofing',    icon: '🏠', label: 'Roofing',                  group: 'structural' },
-  { id: 'plastering', icon: '🪣', label: 'Plastering',               group: 'finishing'  },
-  { id: 'flooring',   icon: '⬜', label: 'Screeding & Tiling',       group: 'finishing'  },
-  { id: 'plumbing',   icon: '🚿', label: 'Plumbing & Sanitary',      group: 'mep'        },
-  { id: 'electrical', icon: '⚡', label: 'Electrical Works',          group: 'mep'        },
-  { id: 'painting',   icon: '🎨', label: 'Painting & Finishes',      group: 'finishing'  },
-  { id: 'fencing',    icon: '📲', label: 'Fencing & Gate',           group: 'external'   },
-  { id: 'windows',    icon: '🪟', label: 'Windows & Doors',          group: 'finishing'  },
-  { id: 'staircase',  icon: '🪜', label: 'Staircase',                group: 'structural' },
-  { id: 'siteworks',  icon: '🚜', label: 'Siteworks & Drainage',     group: 'external'   },
+  // Structural Works
+  { id: 'excavation',   icon: '⛏️',  label: 'Excavation',             group: 'structural' },
+  { id: 'foundation',   icon: '⬇️',  label: 'Foundation',            group: 'structural' },
+  { id: 'groundbeam',   icon: '🏗️',  label: 'Ground Beam',           group: 'structural' },
+  { id: 'columns',      icon: '📐',  label: 'Columns',               group: 'structural' },
+  { id: 'beams',        icon: '━━',  label: 'Beams',                 group: 'structural' },
+  { id: 'slab',         icon: '▭',   label: 'Slab',                  group: 'structural' },
+  { id: 'staircase',    icon: '🪜',  label: 'Staircase',             group: 'structural' },
+  { id: 'roofing',      icon: '🏠',  label: 'Roofing',               group: 'structural' },
+
+  // Finishes
+  { id: 'plastering',   icon: '🪣',  label: 'Plastering',            group: 'finishing'  },
+  { id: 'screeding',    icon: '📏',  label: 'Screeding',             group: 'finishing'  },
+  { id: 'painting',     icon: '🎨',  label: 'Painting',              group: 'finishing'  },
+  { id: 'tiling',       icon: '⬜',  label: 'Tiling',                group: 'finishing'  },
+  { id: 'ceiling',      icon: '⬜',  label: 'Ceiling',               group: 'finishing'  },
+  { id: 'doors',        icon: '🚪',  label: 'Doors',                 group: 'finishing'  },
+  { id: 'windows',      icon: '🪟',  label: 'Windows',               group: 'finishing'  },
+
+  // M&E Services
+  { id: 'electrical',   icon: '⚡',  label: 'Electrical',            group: 'mep'        },
+  { id: 'plumbing',     icon: '🚿',  label: 'Plumbing',              group: 'mep'        },
+  { id: 'hvac',         icon: '❄️',  label: 'HVAC',                  group: 'mep'        },
+  { id: 'fireprotection', icon: '🔥', label: 'Fire Protection',      group: 'mep'        },
+  { id: 'lowvoltage',   icon: '📡',  label: 'Low Voltage Systems',   group: 'mep'        },
+
+  // External Works
+  { id: 'fencing',      icon: '🚧',  label: 'Fencing',               group: 'external'   },
+  { id: 'gate',         icon: '🚪',  label: 'Gate',                  group: 'external'   },
+  { id: 'driveway',     icon: '🛣️',  label: 'Driveway',              group: 'external'   },
+  { id: 'landscaping',  icon: '🌳',  label: 'Landscaping',           group: 'external'   },
+  { id: 'drainage',     icon: '💧',  label: 'Drainage',              group: 'external'   },
 ];
 
 const PHASE_GROUPS = [
