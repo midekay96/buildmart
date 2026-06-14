@@ -306,20 +306,31 @@ function FloorLevel({ floorIndex, numFloors, yBase, w, d, wallColor, isGround, s
       {/* Balcony â€” upper floors */}
       {!isGround && (
         <>
-          <mesh position={[0, -0.1, d / 2 + 0.5]} castShadow>
-            <boxGeometry args={[w, 0.18, 1.0]} /><meshStandardMaterial color="#C8C0B4" roughness={0.85} />
+          {/* Enhanced larger balcony with prominent railing */}
+          <mesh position={[0, -0.1, d / 2 + 0.65]} castShadow receiveShadow>
+            <boxGeometry args={[w + 0.6, 0.2, 1.4]} /><meshStandardMaterial color="#B8B0A4" roughness={0.88} />
           </mesh>
-          <mesh position={[0, 0.55, d / 2 + 0.95]}>
-            <boxGeometry args={[w, 0.08, 0.07]} /><meshStandardMaterial color="#FFFFFF" roughness={0.4} />
+          <mesh position={[0, 0.65, d / 2 + 1.35]}>
+            <boxGeometry args={[w + 0.6, 0.1, 0.1]} /><meshStandardMaterial color="#A0A090" roughness={0.5} />
           </mesh>
-          {Array.from({ length: Math.ceil(w / 0.8) }, (_, i) => {
-            const bx = -w / 2 + 0.4 + i * 0.8;
+          {Array.from({ length: Math.ceil((w + 0.6) / 0.9) }, (_, i) => {
+            const bx = -(w + 0.6) / 2 + 0.45 + i * 0.9;
             return (
-              <mesh key={i} position={[bx, 0.28, d / 2 + 0.95]}>
-                <boxGeometry args={[0.06, 0.6, 0.06]} /><meshStandardMaterial color="#DDDDDD" roughness={0.45} />
+              <mesh key={`rail-${i}`} position={[bx, 0.35, d / 2 + 1.35]}>
+                <boxGeometry args={[0.08, 0.8, 0.08]} /><meshStandardMaterial color="#E0D8CC" roughness={0.4} metalness={0.1} />
               </mesh>
             );
           })}
+          <mesh position={[0, 0.78, d / 2 + 1.35]}>
+            <boxGeometry args={[w + 0.6, 0.06, 0.06]} /><meshStandardMaterial color="#D0C8BC" roughness={0.5} metalness={0.15} />
+          </mesh>
+          {/* Floor division lines on sides */}
+          <mesh position={[w / 2 + 0.08, FLOOR_H / 2, 0]} castShadow>
+            <boxGeometry args={[0.16, FLOOR_H, d + 0.3]} /><meshStandardMaterial color="#9A9085" roughness={0.75} />
+          </mesh>
+          <mesh position={[-w / 2 - 0.08, FLOOR_H / 2, 0]} castShadow>
+            <boxGeometry args={[0.16, FLOOR_H, d + 0.3]} /><meshStandardMaterial color="#9A9085" roughness={0.75} />
+          </mesh>
         </>
       )}
 
