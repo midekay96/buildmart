@@ -654,7 +654,13 @@ export default function Visualizer3D({ phases, grandTotal, phaseTotal, form, spe
   const gt  = grandTotal || 0;
   const sel = selected   || [];
   const fl  = form?.floors || 1;
-  const sp  = specs || { foundation: 'strip', wallType: 'sandcrete9', slabType: 'hollow', roofType: 'gable' };
+  // Ensure all specs are present with fallback defaults
+  const sp  = {
+    foundation: specs?.foundation || 'strip',
+    wallType: specs?.wallType || 'sandcrete9',
+    slabType: specs?.slabType || 'hollow',
+    roofType: specs?.roofType || 'gable'
+  };
 
   const [timeMode,      setTimeMode]      = useState('evening');
   const [cameraPreset,  setCameraPreset]  = useState('front');
