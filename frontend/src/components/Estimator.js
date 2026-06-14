@@ -967,7 +967,14 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
 
   const handleSpecSelect = (specKey, specId) => {
     setSp(specKey, specId);
-    autoExpandNextSection(specKey);
+    // Map specKey to section id
+    const sectionMap = {
+      'foundation': 'foundation',
+      'wallType': 'wall',
+      'slabType': 'slab',
+      'roofType': 'roof'
+    };
+    autoExpandNextSection(sectionMap[specKey] || specKey);
   };
 
   const handlePhaseToggle = (phaseId) => {
