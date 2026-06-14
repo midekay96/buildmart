@@ -1023,7 +1023,7 @@
 .boqSecLabel {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #cbd5e1;
+  color: var(--text-primary);
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1040,8 +1040,8 @@
 }
 
 .boqTable th {
-  color: var(--text-muted);
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-weight: 700;
   text-align: left;
   padding: 12px 8px;
 }
@@ -1049,7 +1049,7 @@
 .boqTable td {
   padding: 12px 8px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: #cbd5e1;
+  color: var(--text-secondary);
 }
 
 .boqTable tbody tr:hover {
