@@ -378,11 +378,15 @@ function HouseModel({ wallColor, roofColor, stage, timeMode, selected, specs, fl
   const stageRoof       = stage >= 2;
   const stageFinishing  = stage >= 3;
 
+  // Check for structural phases - if ANY structural phase is selected, show walls
+  const structuralPhases = ['foundation', 'columns', 'beams', 'groundbeam', 'slab', 'staircase', 'roofing', 'excavation'];
+  const hasStructural = structuralPhases.some(phase => selected.includes(phase));
+
   const hasFoundation = selected.includes('foundation');
-  const hasBlockwork  = selected.includes('blockwork');
-  const hasRoofing    = selected.includes('roofing');
+  const hasBlockwork  = hasStructural; // Show walls if any structural work is selected
+  const hasRoofing    = selected.includes('roofing') || hasStructural; // Show roof if structural work exists
   const hasWindows    = selected.includes('windows');
-  const hasDecking    = selected.includes('decking');
+  const hasDecking    = selected.includes('decking') || selected.includes('slab');
 
   const wallTypeOverride = WALL_COLOR_OVERRIDE[specs?.wallType];
   const effectiveWall    = wallTypeOverride || wallColor;
