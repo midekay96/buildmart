@@ -794,18 +794,21 @@ function getRecommendedPhases(selectedType, floors, PHASES) {
   const isMultiStorey = floors > 1;
 
   // Core structural phases (always included)
-  const recommended = ['foundation', 'blockwork', 'roofing', 'plastering', 'flooring', 'painting'];
+  const recommended = ['excavation', 'foundation', 'groundbeam', 'columns', 'beams', 'roofing'];
 
   // Add multi-storey phases if applicable
   if (isMultiStorey) {
-    recommended.push('decking', 'staircase');
+    recommended.push('slab', 'staircase');
   }
 
-  // Add finishing and MEP phases
-  recommended.push('plumbing', 'electrical', 'windows');
+  // Add finishing phases
+  recommended.push('plastering', 'screeding', 'tiling', 'painting');
+
+  // Add MEP services
+  recommended.push('plumbing', 'electrical', 'windows', 'doors');
 
   // Add external works for all
-  recommended.push('siteworks');
+  recommended.push('drainage');
 
   return PHASES.filter(p => recommended.includes(p.id)).map(p => p.id);
 }
@@ -1243,7 +1246,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
                       <div className={styles.phaseGroupCollapsibleContent}>
                         {groupPhases.map(ph => {
                           const isOn = selected.includes(ph.id);
-                          const disabled = (ph.id === 'decking' || ph.id === 'staircase') && floors === 1;
+                          const disabled = (ph.id === 'slab' || ph.id === 'staircase') && floors === 1;
                           return (
                             <button
                               key={ph.id}
