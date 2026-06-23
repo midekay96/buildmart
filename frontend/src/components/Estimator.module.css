@@ -1768,6 +1768,17 @@
   margin: 0 0 20px;
 }
 
+.sectionGuidance {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px;
+  padding: 14px;
+  background: rgba(29,158,117,0.08);
+  border-left: 3px solid var(--accent-default);
+  border-radius: 6px;
+}
+
 .activeSectionContinueBtn {
   width: 100%;
   padding: 12px;

@@ -690,7 +690,7 @@ function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES
           value={form.customBuildingDesc} onChange={e => { setF('customBuildingDesc', e.target.value); setF('buildingType', ''); }} />
         {form.customBuildingDesc && (
           <button className={styles.customBoxNextBtn} onClick={next} disabled={!form.customBuildingDesc.trim()}>
-            Next: Structural Specs →
+            Next: Project Details →
           </button>
         )}
       </div>
@@ -779,7 +779,7 @@ function BuildingTypeStep({ form, setF, canNext, back, next, BUILDING_CATEGORIES
 
       <div className={styles.navRow}>
         <button className={styles.btnGhost} onClick={back}>← Back</button>
-        <button className={styles.btnPrimary} onClick={next} disabled={!canNext}>Next: Structural Specs →</button>
+        <button className={styles.btnPrimary} onClick={next} disabled={!canNext}>Next: Project Details →</button>
       </div>
     </div>
   );
@@ -1053,6 +1053,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'dimensions' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>📐 Project Dimensions</h3>
+            <p className={styles.sectionGuidance}>Tell us the basic size and structure of your project. These details help us recommend the right materials and estimate costs accurately.</p>
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
                 <label className={styles.label}>Total Floor Area (m²)</label>
@@ -1090,6 +1091,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'quality' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>⭐ Quality Tier</h3>
+            <p className={styles.sectionGuidance}>Choose the quality level that matches your budget and preferences. Each tier includes materials and finishes appropriate for your building type.</p>
             <div className={styles.tierGrid}>
               {QUALITY_TIERS.map(tier => (
                 <button
@@ -1111,6 +1113,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'foundation' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>⬇️ Foundation Type</h3>
+            <p className={styles.sectionGuidance}>The foundation supports your entire building. Choose based on soil conditions and building weight. We recommend options suitable for your project.</p>
             {selectedType && (
               <div className={styles.recommendationCard}>
                 <span className={styles.recommendationStar}>⭐</span>
@@ -1145,6 +1148,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'wall' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>🧱 Wall Type</h3>
+            <p className={styles.sectionGuidance}>Walls define your building's durability and aesthetics. Choose materials based on climate, budget, and desired finish quality.</p>
             {selectedType && (
               <div className={styles.recommendationCard}>
                 <span className={styles.recommendationStar}>⭐</span>
@@ -1179,6 +1183,18 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {needsSlab && activeSection === 'slab' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>🏗️ Slab Type</h3>
+            <p className={styles.sectionGuidance}>Slabs separate building floors. Choose based on span distance, load capacity, and cost preference for your multi-storey project.</p>
+            {selectedType && (
+              <div className={styles.recommendationCard}>
+                <span className={styles.recommendationStar}>⭐</span>
+                <div>
+                  <div className={styles.recommendationLabel}>Recommended for {selectedType.label}</div>
+                  <div className={styles.recommendationValue}>
+                    {getRecommendation(selectedType, form.quality, 'slab', FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES)?.label}
+                  </div>
+                </div>
+              </div>
+            )}
             <div className={styles.specGrid}>
               {SLAB_TYPES.map(s => (
                 <button
@@ -1202,6 +1218,18 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'roof' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>🏠 Roof Type</h3>
+            <p className={styles.sectionGuidance}>The roof protects your building from weather. Choose materials based on climate, aesthetics, and durability needs.</p>
+            {selectedType && (
+              <div className={styles.recommendationCard}>
+                <span className={styles.recommendationStar}>⭐</span>
+                <div>
+                  <div className={styles.recommendationLabel}>Recommended for {selectedType.label}</div>
+                  <div className={styles.recommendationValue}>
+                    {getRecommendation(selectedType, form.quality, 'roof', FOUNDATION_TYPES, WALL_TYPES, SLAB_TYPES, ROOF_TYPES)?.label}
+                  </div>
+                </div>
+              </div>
+            )}
             <div className={styles.specGrid}>
               {ROOF_TYPES.map(r => (
                 <button
@@ -1222,6 +1250,7 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
         {activeSection === 'phases' && (
           <div className={styles.activeSection}>
             <h3 className={styles.activeSectionTitle}>✅ Select Work Phases</h3>
+            <p className={styles.sectionGuidance}>Choose which construction phases you need. Our system can recommend phases based on your building type, or you can manually select them.</p>
             <button
               className={styles.selectRecommendedBtn}
               onClick={handleSelectRecommendedPhases}
@@ -1381,36 +1410,6 @@ export default function Estimator() {
                 </p>
               </div>
 
-              <div className={styles.welcomeFeatures}>
-                <div className={styles.featureItem}>
-                  <span className={styles.featureIcon}>💰</span>
-                  <div>
-                    <h3>Marketplace Prices</h3>
-                    <p>All material costs synchronized with our live marketplace</p>
-                  </div>
-                </div>
-                <div className={styles.featureItem}>
-                  <span className={styles.featureIcon}>🎨</span>
-                  <div>
-                    <h3>Quality Options</h3>
-                    <p>Choose between Standard, Medium, and Premium finishes</p>
-                  </div>
-                </div>
-                <div className={styles.featureItem}>
-                  <span className={styles.featureIcon}>📊</span>
-                  <div>
-                    <h3>Detailed Breakdown</h3>
-                    <p>Bill of Quantities with materials, labour, and phases</p>
-                  </div>
-                </div>
-                <div className={styles.featureItem}>
-                  <span className={styles.featureIcon}>🔍</span>
-                  <div>
-                    <h3>Expert Specs</h3>
-                    <p>Engineering recommendations based on best practices</p>
-                  </div>
-                </div>
-              </div>
 
               <div className={styles.navRow}>
                 <span />
@@ -1419,8 +1418,18 @@ export default function Estimator() {
             </div>
           )}
 
-          {/* ════ STEP 2 — PROJECT DETAILS ════ */}
+          {/* ════ STEP 2 — BUILDING TYPE ════ */}
           {step === 2 && (
+            <BuildingTypeStep
+              form={form} setF={setF} canNext={canNext3}
+              back={back} next={next}
+              BUILDING_CATEGORIES={BUILDING_CATEGORIES}
+              styles={styles}
+            />
+          )}
+
+          {/* ════ STEP 3 — PROJECT DETAILS ════ */}
+          {step === 3 && (
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>Project Details</h2>
@@ -1448,19 +1457,9 @@ export default function Estimator() {
 
               <div className={styles.navRow}>
                 <button className={styles.btnGhost} onClick={back}>← Back</button>
-                <button className={styles.btnPrimary} onClick={next} disabled={!canNext2}>Next: Building Type →</button>
+                <button className={styles.btnPrimary} onClick={next} disabled={!canNext2}>Next: Structural Specs →</button>
               </div>
             </div>
-          )}
-
-          {/* ════ STEP 3 — BUILDING TYPE ════ */}
-          {step === 3 && (
-            <BuildingTypeStep
-              form={form} setF={setF} canNext={canNext3}
-              back={back} next={next}
-              BUILDING_CATEGORIES={BUILDING_CATEGORIES}
-              styles={styles}
-            />
           )}
 
           {/* ════ STEP 4 — STRUCTURAL SPECS ════ */}
