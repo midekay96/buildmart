@@ -1317,8 +1317,8 @@ function StructuralSpecsStep({ form, setF, specs, setSp, selected, togglePhase, 
 // ── Step Indicator ───────────────────────────────────────────────────────
 const STEP_LABELS = [
   { n: 1, label: 'Welcome' },
-  { n: 2, label: 'Project Details' },
-  { n: 3, label: 'Building Type' },
+  { n: 2, label: 'Building Type' },
+  { n: 3, label: 'Project Details' },
   { n: 4, label: 'Structure' },
   { n: 5, label: '3D Preview' },
   { n: 6, label: 'Cost Estimate' },
