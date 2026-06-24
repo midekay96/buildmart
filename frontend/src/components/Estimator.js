@@ -1400,124 +1400,108 @@ export default function Estimator() {
 
           {/* ════ STEP 1 — WELCOME ════ */}
           {step === 1 && (
-            <div className={styles.welcomeHeroSingle}>
-              {/* LEFT COLUMN: CONSTRUCTION VISUALIZATION */}
-              <div className={styles.heroVisualsLeft}>
-                <svg viewBox="0 0 400 500" className={styles.constructionSvg}>
-                  {/* Blueprint Grid Background */}
-                  <defs>
-                    <pattern id="constructionGrid" width="25" height="25" patternUnits="userSpaceOnUse">
-                      <path d="M 25 0 L 0 0 0 25" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.08"/>
-                    </pattern>
-                    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style={{stopColor: '#1D9E75', stopOpacity: 0.3}} />
-                      <stop offset="100%" style={{stopColor: '#10B981', stopOpacity: 0.1}} />
-                    </linearGradient>
-                  </defs>
+            <div className={styles.welcomeCenteredHero}>
+              {/* Background Decorative Elements */}
+              <div className={styles.heroBgDecor}></div>
 
-                  {/* Grid Background */}
-                  <rect width="400" height="500" fill="url(#constructionGrid)" />
+              {/* CENTERED HERO CONTENT */}
+              <div className={styles.heroMainContent}>
+                {/* Construction Crane Illustration */}
+                <div className={styles.craneIllustration}>
+                  <svg viewBox="0 0 200 200" className={styles.craneSvg}>
+                    {/* Crane Mast */}
+                    <rect x="90" y="20" width="20" height="140" fill="#D97706" opacity="0.9"/>
 
-                  {/* Building Structure */}
-                  <g opacity="0.6">
-                    {/* Foundation */}
-                    <rect x="50" y="380" width="300" height="40" fill="url(#buildingGradient)" stroke="#1D9E75" strokeWidth="2"/>
+                    {/* Crane Jib (horizontal arm) */}
+                    <rect x="30" y="40" width="140" height="12" fill="#D97706" opacity="0.85" rx="2"/>
 
-                    {/* Floors */}
-                    {[0, 1, 2, 3].map((floor) => (
-                      <g key={`floor-${floor}`}>
-                        <rect x="50" y={280 - floor * 80} width="300" height="70" fill="none" stroke="#1D9E75" strokeWidth="1.5" opacity="0.4"/>
-                        <line x1="50" y1={325 - floor * 80} x2="350" y2={325 - floor * 80} stroke="#1D9E75" strokeWidth="1" opacity="0.3"/>
+                    {/* Trolley */}
+                    <circle cx="100" cy="46" r="8" fill="#D97706" opacity="0.9"/>
 
-                        {/* Column supports */}
-                        <circle cx="80" cy={315 - floor * 80} r="4" fill="#1D9E75" opacity="0.5"/>
-                        <circle cx="200" cy={315 - floor * 80} r="4" fill="#1D9E75" opacity="0.5"/>
-                        <circle cx="320" cy={315 - floor * 80} r="4" fill="#1D9E75" opacity="0.5"/>
-                      </g>
-                    ))}
+                    {/* Cable */}
+                    <line x1="100" y1="54" x2="100" y2="120" stroke="#666" strokeWidth="2" opacity="0.6"/>
 
-                    {/* Roof */}
-                    <polygon points="50,280 200,100 350,280" fill="none" stroke="#1D9E75" strokeWidth="2" opacity="0.5"/>
-                    <line x1="200" y1="100" x2="200" y2="280" stroke="#1D9E75" strokeWidth="1" opacity="0.3"/>
-                  </g>
+                    {/* Hook */}
+                    <g>
+                      <path d="M 95 120 Q 95 135 100 140 Q 105 135 105 120" fill="none" stroke="#666" strokeWidth="2" opacity="0.6"/>
+                    </g>
 
-                  {/* Construction Crane */}
-                  <g opacity="0.5">
-                    <rect x="320" y="80" width="8" height="200" fill="#D97706" opacity="0.7"/>
-                    <rect x="250" y="85" width="80" height="6" fill="#D97706" opacity="0.7"/>
-                    <circle cx="255" cy="90" r="4" fill="#D97706"/>
-                    <line x1="330" y1="95" x2="360" y2="140" stroke="#D97706" strokeWidth="1.5" opacity="0.6"/>
-                  </g>
-
-                  {/* Structural Elements */}
-                  <g stroke="#1D9E75" strokeWidth="1.5" fill="none" opacity="0.3">
-                    <line x1="70" y1="280" x2="70" y2="380"/>
-                    <line x1="200" y1="280" x2="200" y2="380"/>
-                    <line x1="330" y1="280" x2="330" y2="380"/>
-                  </g>
-                </svg>
-              </div>
-
-              {/* RIGHT COLUMN: CONTENT */}
-              <div className={styles.heroContentRight}>
-                {/* Platform Badge */}
-                <div className={styles.platformBadge}>
-                  🏗️ Construction Cost Estimation Platform
+                    {/* Load (red container) */}
+                    <rect x="75" y="140" width="50" height="40" fill="#EF4444" opacity="0.85" rx="4"/>
+                    <rect x="78" y="143" width="44" height="34" fill="#DC2626" opacity="0.7"/>
+                  </svg>
                 </div>
 
                 {/* Main Heading */}
-                <h1 className={styles.heroHeading}>
+                <h1 className={styles.centeredHeroTitle}>
                   Welcome to BuildMart Estimator
                 </h1>
 
                 {/* Description */}
-                <p className={styles.heroDescription}>
-                  Get accurate, detailed cost estimates for your building projects in minutes. From residential homes to commercial complexes, we've got you covered.
+                <p className={styles.centeredHeroDescription}>
+                  Get accurate, detailed cost estimates for your building projects in minutes.<br/>
+                  From residential homes to commercial complexes, we've got you covered.
                 </p>
 
                 {/* Primary CTA */}
-                <button className={styles.heroCTAButton} onClick={next}>
+                <button className={styles.centeredCTAButton} onClick={next}>
                   Get Started →
                 </button>
+              </div>
 
-                {/* Features Grid (2x2) - INTEGRATED INTO HERO */}
-                <div className={styles.featuresGrid}>
-                  <div className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    <div>
-                      <div className={styles.featureTitle}>Accurate Estimation</div>
-                      <div className={styles.featureDesc}>Real marketplace prices</div>
-                    </div>
-                  </div>
-                  <div className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    <div>
-                      <div className={styles.featureTitle}>Material Analysis</div>
-                      <div className={styles.featureDesc}>Detailed breakdowns</div>
-                    </div>
-                  </div>
-                  <div className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    <div>
-                      <div className={styles.featureTitle}>3D Preview</div>
-                      <div className={styles.featureDesc}>Visualize your project</div>
-                    </div>
-                  </div>
-                  <div className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    <div>
-                      <div className={styles.featureTitle}>Supplier Integration</div>
-                      <div className={styles.featureDesc}>Connect with partners</div>
-                    </div>
+              {/* 4 FEATURE CARDS - HORIZONTAL ROW */}
+              <div className={styles.featuresRow}>
+                <div className={styles.featureCard}>
+                  <div className={styles.featureCardIcon}>📋</div>
+                  <h3 className={styles.featureCardTitle}>Accurate Estimation</h3>
+                  <p className={styles.featureCardDesc}>Detailed BOQ and cost estimates with real-time market rates.</p>
+                </div>
+                <div className={styles.featureCard}>
+                  <div className={styles.featureCardIcon}>🧱</div>
+                  <h3 className={styles.featureCardTitle}>Material Analysis</h3>
+                  <p className={styles.featureCardDesc}>Get precise material quantities and cost breakdowns.</p>
+                </div>
+                <div className={styles.featureCard}>
+                  <div className={styles.featureCardIcon}>📦</div>
+                  <h3 className={styles.featureCardTitle}>3D Project Preview</h3>
+                  <p className={styles.featureCardDesc}>Visualize your project in 3D before construction.</p>
+                </div>
+                <div className={styles.featureCard}>
+                  <div className={styles.featureCardIcon}>🤝</div>
+                  <h3 className={styles.featureCardTitle}>Supplier Integration</h3>
+                  <p className={styles.featureCardDesc}>Compare supplier quotes and get the best market deals.</p>
+                </div>
+              </div>
+
+              {/* TRUST INDICATORS - HORIZONTAL ROW */}
+              <div className={styles.trustRow}>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustCheckmark}>✓</span>
+                  <div>
+                    <div className={styles.trustLabel}>Trusted by 500+ Builders</div>
+                    <div className={styles.trustSubtext}>Across residential & commercial projects</div>
                   </div>
                 </div>
-
-                {/* Trust Indicators - INTEGRATED INTO HERO */}
-                <div className={styles.trustChips}>
-                  <span className={styles.trustChip}>✓ Accurate Pricing</span>
-                  <span className={styles.trustChip}>✓ Fast Estimates</span>
-                  <span className={styles.trustChip}>✓ Professional BOQ</span>
-                  <span className={styles.trustChip}>✓ Secure Data</span>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustCheckmark}>⏱️</span>
+                  <div>
+                    <div className={styles.trustLabel}>Save Time</div>
+                    <div className={styles.trustSubtext}>Estimates in under 5 minutes</div>
+                  </div>
+                </div>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustCheckmark}>✓</span>
+                  <div>
+                    <div className={styles.trustLabel}>99% Accuracy</div>
+                    <div className={styles.trustSubtext}>Reliable & precise calculations</div>
+                  </div>
+                </div>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustCheckmark}>🔒</span>
+                  <div>
+                    <div className={styles.trustLabel}>Secure & Private</div>
+                    <div className={styles.trustSubtext}>Your data is always protected</div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -156,134 +156,187 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-/* WELCOME SCREEN — COHESIVE HERO REDESIGN */
+/* WELCOME SCREEN — CENTERED HERO REDESIGN (Matching Screenshot) */
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
 
-.welcomeHeroSingle {
-  display: grid;
-  grid-template-columns: 45% 55%;
-  gap: 32px;
+.welcomeCenteredHero {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  height: calc(100vh - 180px);
-  max-height: 600px;
-  padding: 0 40px;
+  justify-content: center;
+  min-height: calc(100vh - 180px);
+  padding: 40px 24px;
+  position: relative;
+  gap: 48px;
   animation: fadeIn 0.5s ease;
 }
 
-/* ── LEFT COLUMN: CONSTRUCTION VISUALIZATION ──────────────────────────────────────── */
-.heroVisualsLeft {
+.heroBgDecor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(29,158,117,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(29,158,117,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CENTERED HERO MAIN CONTENT ──────────────────────────────────────────────────── */
+.heroMainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 700px;
+  text-align: center;
+  z-index: 1;
+}
+
+.craneIllustration {
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  margin-bottom: 8px;
 }
 
-.constructionSvg {
+.craneSvg {
   width: 100%;
   height: 100%;
-  max-width: 380px;
-  max-height: 480px;
-  color: var(--accent-default);
-  filter: drop-shadow(0 8px 24px rgba(29,158,117,0.12));
-  opacity: 0.95;
+  filter: drop-shadow(0 4px 12px rgba(217,119,6,0.2));
 }
 
-/* ── RIGHT COLUMN: HERO CONTENT (ALL INTEGRATED) ───────────────────────────────── */
-.heroContentRight {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  height: 100%;
-  justify-content: flex-start;
-}
-
-.platformBadge {
-  display: inline-block;
-  background: rgba(29,158,117,0.1);
-  border: 1px solid rgba(29,158,117,0.25);
-  color: var(--accent-default);
-  padding: 8px 16px;
-  border-radius: 24px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  width: fit-content;
-  letter-spacing: 0.3px;
-}
-
-.heroHeading {
-  font-size: 3rem;
+.centeredHeroTitle {
+  font-size: 3.2rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: var(--accent-default);
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-.heroDescription {
+.centeredHeroDescription {
   font-size: 1.05rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.6;
-  max-width: 450px;
+  line-height: 1.7;
+  max-width: 600px;
   font-weight: 400;
 }
 
-.heroCTAButton {
-  align-self: flex-start;
-  padding: 16px 40px;
+.centeredCTAButton {
+  padding: 16px 48px;
   background: var(--accent-default);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
-  box-shadow: 0 6px 20px rgba(29,158,117,0.3);
+  box-shadow: 0 8px 24px rgba(29,158,117,0.3);
   letter-spacing: 0.5px;
-}
-
-.heroCTAButton:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(29,158,117,0.4);
-}
-
-.heroCTAButton:active {
-  transform: translateY(0);
-}
-
-/* ── FEATURES GRID (2x2) - INTEGRATED WITHIN HERO ──────────────────────────────── */
-.featuresGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 20px;
   margin-top: 8px;
 }
 
-.featureItem {
+.centeredCTAButton:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(29,158,117,0.4);
+}
+
+.centeredCTAButton:active {
+  transform: translateY(0);
+}
+
+/* ── 4 FEATURE CARDS - HORIZONTAL ROW ────────────────────────────────────────────── */
+.featuresRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+  z-index: 1;
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 28px 20px;
+  background: linear-gradient(135deg, rgba(29,158,117,0.05) 0%, rgba(16,185,129,0.02) 100%);
+  border: 1px solid rgba(29,158,117,0.12);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  background: linear-gradient(135deg, rgba(29,158,117,0.08) 0%, rgba(16,185,129,0.05) 100%);
+  border-color: rgba(29,158,117,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(29,158,117,0.12);
+}
+
+.featureCardIcon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.featureCardTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.featureCardDesc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── TRUST INDICATORS - HORIZONTAL ROW ───────────────────────────────────────────── */
+.trustRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  width: 100%;
+  max-width: 1000px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 1;
+}
+
+.trustItem {
   display: flex;
   gap: 12px;
   align-items: flex-start;
 }
 
-.featureItem span:first-child {
+.trustCheckmark {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background: rgba(29,158,117,0.15);
   border-radius: 50%;
   color: var(--accent-default);
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.featureTitle {
+.trustLabel {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -291,32 +344,11 @@
   line-height: 1.3;
 }
 
-.featureDesc {
+.trustSubtext {
   font-size: 0.8rem;
   color: var(--text-muted);
-  margin: 2px 0 0;
-  line-height: 1.3;
-}
-
-/* ── TRUST CHIPS - INTEGRATED INTO HERO ────────────────────────────────────────── */
-.trustChips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.trustChip {
-  display: inline-block;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  padding: 6px 0;
-  font-weight: 500;
-}
-
-.trustChip::before {
-  content: '';
-  margin-right: 6px;
+  margin: 4px 0 0;
+  line-height: 1.4;
 }
 
 /* ── REDESIGNED PROGRESS STEPPER ──────────────────────────────────────────────── */
@@ -2230,57 +2262,58 @@
   }
 
   /* ── WELCOME SCREEN RESPONSIVE ────────────────────────────────────── */
-  .welcomeHeroSingle {
-    grid-template-columns: 1fr;
-    height: auto;
-    max-height: none;
-    gap: 24px;
-    padding: 24px;
+  .welcomeCenteredHero {
+    padding: 32px 20px;
+    gap: 40px;
+    min-height: auto;
   }
 
-  .heroVisualsLeft {
-    max-width: 100%;
-    height: auto;
-    min-height: 300px;
+  .craneIllustration {
+    width: 100px;
+    height: 100px;
   }
 
-  .constructionSvg {
-    max-width: 100%;
-    max-height: 350px;
+  .centeredHeroTitle {
+    font-size: 2.4rem;
   }
 
-  .heroHeading {
-    font-size: 2.2rem;
+  .centeredHeroDescription {
+    font-size: 0.95rem;
+    max-width: 500px;
   }
 
-  .heroDescription {
-    font-size: 1rem;
-  }
-
-  .heroCTAButton {
-    padding: 14px 32px;
+  .centeredCTAButton {
+    padding: 14px 40px;
     font-size: 0.95rem;
   }
 
-  .featuresGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px 16px;
+  .featuresRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 100%;
   }
 
-  .featureTitle {
-    font-size: 0.85rem;
+  .featureCard {
+    padding: 20px 16px;
   }
 
-  .featureDesc {
-    font-size: 0.75rem;
+  .featureCardIcon {
+    font-size: 2rem;
+    margin-bottom: 10px;
   }
 
-  .trustChips {
-    gap: 10px;
+  .featureCardTitle {
+    font-size: 0.9rem;
   }
 
-  .trustChip {
+  .featureCardDesc {
     font-size: 0.8rem;
+  }
+
+  .trustRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 24px 0;
   }
 
   .stepBar {
@@ -2488,61 +2521,73 @@
 }
 
 @media (max-width: 480px) {
-  .welcomeHeroSingle {
-    padding: 16px;
-    gap: 16px;
+  .welcomeCenteredHero {
+    padding: 20px 16px;
+    gap: 32px;
   }
 
-  .heroVisualsLeft {
-    min-height: 240px;
+  .craneIllustration {
+    width: 90px;
+    height: 90px;
   }
 
-  .constructionSvg {
-    max-height: 280px;
+  .centeredHeroTitle {
+    font-size: 1.9rem;
   }
 
-  .heroHeading {
-    font-size: 1.8rem;
-  }
-
-  .heroDescription {
+  .centeredHeroDescription {
     font-size: 0.9rem;
   }
 
-  .heroCTAButton {
-    padding: 12px 24px;
+  .centeredCTAButton {
+    padding: 12px 32px;
     font-size: 0.9rem;
   }
 
-  .featuresGrid {
+  .featuresRow {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .featureCard {
+    padding: 16px 12px;
+  }
+
+  .featureCardIcon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .featureCardTitle {
+    font-size: 0.85rem;
+  }
+
+  .featureCardDesc {
+    font-size: 0.75rem;
+  }
+
+  .trustRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px 0;
+  }
+
+  .trustItem {
     gap: 10px;
   }
 
-  .featureItem {
-    gap: 10px;
-  }
-
-  .featureTitle {
+  .trustCheckmark {
+    width: 22px;
+    height: 22px;
     font-size: 0.8rem;
   }
 
-  .featureDesc {
-    font-size: 0.7rem;
+  .trustLabel {
+    font-size: 0.85rem;
   }
 
-  .trustChips {
-    gap: 8px;
-    flex-direction: column;
-  }
-
-  .trustChip {
+  .trustSubtext {
     font-size: 0.75rem;
-  }
-
-  .platformBadge {
-    font-size: 0.75rem;
-    padding: 6px 12px;
   }
 
   .stepBar {
