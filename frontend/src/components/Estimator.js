@@ -1400,20 +1400,87 @@ export default function Estimator() {
 
           {/* ════ STEP 1 — WELCOME ════ */}
           {step === 1 && (
-            <div className={styles.card}>
-              <div className={styles.welcomeHeader}>
-                <div className={styles.welcomeIcon}>🏗️</div>
-                <h1 className={styles.welcomeTitle}>Welcome to BuildMart Estimator</h1>
-                <p className={styles.welcomeSub}>
-                  Get accurate, detailed cost estimates for your building projects in minutes.
-                  From residential homes to commercial complexes, we've got you covered.
-                </p>
+            <div className={styles.welcomeContainer}>
+              {/* HERO SECTION */}
+              <div className={styles.welcomeHero}>
+                <div className={styles.heroContent}>
+                  <div className={styles.heroIllustration}>
+                    <div className={styles.constructionGrid}>
+                      <svg viewBox="0 0 200 200" className={styles.blueprintSvg}>
+                        <defs>
+                          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.1"/>
+                          </pattern>
+                        </defs>
+                        <rect width="200" height="200" fill="url(#grid)" />
+                        <rect x="40" y="40" width="120" height="120" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+                        <line x1="100" y1="40" x2="100" y2="160" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
+                        <line x1="40" y1="100" x2="160" y2="100" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className={styles.heroText}>
+                    <h1 className={styles.heroTitle}>Welcome to BuildMart Estimator</h1>
+                    <p className={styles.heroSubtitle}>
+                      Get accurate, detailed cost estimates for your building projects in minutes. From residential homes to commercial complexes, we've got you covered.
+                    </p>
+                    <button className={styles.heroCta} onClick={next}>
+                      Get Started →
+                    </button>
+                  </div>
+                </div>
               </div>
 
+              {/* FEATURES ROW */}
+              <div className={styles.featuressRow}>
+                <div className={styles.featureCompact}>
+                  <div className={styles.featureCompactIcon}>📊</div>
+                  <div className={styles.featureCompactContent}>
+                    <div className={styles.featureCompactTitle}>Accurate Estimation</div>
+                    <div className={styles.featureCompactDesc}>Real marketplace prices</div>
+                  </div>
+                </div>
+                <div className={styles.featureCompact}>
+                  <div className={styles.featureCompactIcon}>🔍</div>
+                  <div className={styles.featureCompactContent}>
+                    <div className={styles.featureCompactTitle}>Material Analysis</div>
+                    <div className={styles.featureCompactDesc}>Detailed breakdowns</div>
+                  </div>
+                </div>
+                <div className={styles.featureCompact}>
+                  <div className={styles.featureCompactIcon}>🎨</div>
+                  <div className={styles.featureCompactContent}>
+                    <div className={styles.featureCompactTitle}>3D Preview</div>
+                    <div className={styles.featureCompactDesc}>Visualize your project</div>
+                  </div>
+                </div>
+                <div className={styles.featureCompact}>
+                  <div className={styles.featureCompactIcon}>🤝</div>
+                  <div className={styles.featureCompactContent}>
+                    <div className={styles.featureCompactTitle}>Supplier Integration</div>
+                    <div className={styles.featureCompactDesc}>Connect with partners</div>
+                  </div>
+                </div>
+              </div>
 
-              <div className={styles.navRow}>
-                <span />
-                <button className={styles.btnPrimary} onClick={next}>Get Started →</button>
+              {/* TRUST INDICATORS */}
+              <div className={styles.trustStrip}>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustIcon}>✓</span>
+                  <span className={styles.trustText}>Accurate Pricing</span>
+                </div>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustIcon}>✓</span>
+                  <span className={styles.trustText}>Fast Estimation</span>
+                </div>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustIcon}>✓</span>
+                  <span className={styles.trustText}>Secure Data</span>
+                </div>
+                <div className={styles.trustItem}>
+                  <span className={styles.trustIcon}>✓</span>
+                  <span className={styles.trustText}>Professional BOQ</span>
+                </div>
               </div>
             </div>
           )}

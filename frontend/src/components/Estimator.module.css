@@ -156,52 +156,275 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-/* WELCOME SCREEN */
+/* WELCOME SCREEN — PREMIUM REDESIGN */
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-.welcomeHeader {
-  text-align: center;
-  margin-bottom: 48px;
+.welcomeContainer {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+  gap: 24px;
+  padding: 0 24px;
+  animation: fadeIn 0.4s ease;
 }
 
-.welcomeIcon {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 20px;
-  animation: bounce 0.6s ease;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* ── HERO SECTION ────────────────────────────────────────────────────────────────────── */
+.welcomeHero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
 }
 
-.welcomeTitle {
-  font-size: 2.2rem;
+.heroContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.heroIllustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.constructionGrid {
+  width: 280px;
+  height: 280px;
+  opacity: 0.85;
+}
+
+.blueprintSvg {
+  width: 100%;
+  height: 100%;
+  color: var(--accent-default);
+  filter: drop-shadow(0 4px 12px rgba(29,158,117,0.15));
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heroTitle {
+  font-size: 2.5rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 12px;
-  background: linear-gradient(135deg, var(--accent-default) 0%, var(--success-default) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.welcomeSub {
-  font-size: 1.08rem;
+.heroSubtitle {
+  font-size: 1rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.8;
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  line-height: 1.7;
+  max-width: 450px;
 }
 
-.welcomeFeatures {
+.heroCta {
+  align-self: flex-start;
+  padding: 14px 32px;
+  background: var(--accent-default);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(29,158,117,0.3);
+}
+
+.heroCta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(29,158,117,0.4);
+}
+
+/* ── FEATURES ROW ────────────────────────────────────────────────────────────────────── */
+.featuressRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 0 auto;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100px;
+}
+
+.featureCompact {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(29,158,117,0.08) 0%, rgba(16,185,129,0.04) 100%);
+  border: 1px solid rgba(29,158,117,0.15);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  align-items: flex-start;
+}
+
+.featureCompact:hover {
+  background: linear-gradient(135deg, rgba(29,158,117,0.12) 0%, rgba(16,185,129,0.08) 100%);
+  border-color: rgba(29,158,117,0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(29,158,117,0.1);
+}
+
+.featureCompactIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.featureCompactContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.featureCompactTitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.featureCompactDesc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── TRUST INDICATORS ────────────────────────────────────────────────────────────────── */
+.trustStrip {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  padding: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.trustIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(29,158,117,0.2);
+  border-radius: 50%;
+  color: var(--accent-default);
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.trustText {
+  font-weight: 500;
+}
+
+/* ── REDESIGNED PROGRESS STEPPER ────────────────────────────────────────────────────── */
+.stepBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 16px;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0 24px;
+}
+
+.stepNode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.stepCircle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.stepActive .stepCircle {
+  background: var(--accent-default);
+  border-color: var(--accent-default);
+  color: #fff;
+  box-shadow: 0 0 0 6px rgba(29,158,117,0.15);
+  transform: scale(1.08);
+}
+
+.stepDone .stepCircle {
+  background: var(--success-default);
+  border-color: var(--success-default);
+  color: #fff;
+}
+
+.stepLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-disabled);
+  text-align: center;
+  width: 50px;
+  white-space: nowrap;
+}
+
+.stepActive .stepLabel {
+  color: var(--accent-default);
+  font-weight: 700;
+}
+
+.stepDone .stepLabel {
+  color: var(--success-default);
+}
+
+.stepLine {
+  width: 32px;
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  margin: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.stepLineDone {
+  background: var(--success-default);
+  box-shadow: 0 0 8px rgba(16,185,129,0.3);
 }
 
 .featureItem {
@@ -2028,6 +2251,65 @@
     grid-template-columns: 1fr;
   }
 
+  /* ── WELCOME SCREEN RESPONSIVE ────────────────────────────────────── */
+  .welcomeContainer {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.95rem;
+  }
+
+  .constructionGrid {
+    width: 200px;
+    height: 200px;
+  }
+
+  .featuressRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .featureCompact {
+    padding: 12px;
+  }
+
+  .featureCompactIcon {
+    font-size: 1.2rem;
+  }
+
+  .trustStrip {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .stepBar {
+    padding: 0 12px;
+    gap: 0;
+  }
+
+  .stepLabel {
+    width: 40px;
+    font-size: 0.65rem;
+  }
+
+  .stepLine {
+    width: 20px;
+  }
+
+  /* ────────────────────────────────────────────────────────────────── */
+
   .typeGrid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
@@ -2208,5 +2490,73 @@
 
   .phaseItemLabel {
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeContainer {
+    padding: 0 12px;
+    gap: 16px;
+  }
+
+  .heroContent {
+    gap: 20px;
+  }
+
+  .heroTitle {
+    font-size: 1.6rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.9rem;
+  }
+
+  .constructionGrid {
+    width: 160px;
+    height: 160px;
+  }
+
+  .featuressRow {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .featureCompact {
+    padding: 12px;
+  }
+
+  .trustStrip {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .trustItem {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+
+  .trustIcon {
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+  }
+
+  .stepBar {
+    padding: 0 8px;
+  }
+
+  .stepCircle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .stepLabel {
+    width: 35px;
+    font-size: 0.6rem;
+  }
+
+  .stepLine {
+    width: 16px;
   }
 }
