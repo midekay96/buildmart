@@ -156,202 +156,180 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-/* WELCOME SCREEN — PREMIUM REDESIGN */
+/* WELCOME SCREEN — COHESIVE HERO REDESIGN */
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-.welcomeContainer {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 140px);
-  gap: 24px;
-  padding: 0 24px;
-  animation: fadeIn 0.4s ease;
-}
 
-/* ── HERO SECTION ────────────────────────────────────────────────────────────────────── */
-.welcomeHero {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 320px;
-}
-
-.heroContent {
+.welcomeHeroSingle {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  grid-template-columns: 45% 55%;
+  gap: 32px;
   align-items: center;
-  max-width: 1000px;
-  width: 100%;
+  height: calc(100vh - 180px);
+  max-height: 600px;
+  padding: 0 40px;
+  animation: fadeIn 0.5s ease;
 }
 
-.heroIllustration {
+/* ── LEFT COLUMN: CONSTRUCTION VISUALIZATION ──────────────────────────────────────── */
+.heroVisualsLeft {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
 }
 
-.constructionGrid {
-  width: 280px;
-  height: 280px;
-  opacity: 0.85;
-}
-
-.blueprintSvg {
+.constructionSvg {
   width: 100%;
   height: 100%;
+  max-width: 380px;
+  max-height: 480px;
   color: var(--accent-default);
-  filter: drop-shadow(0 4px 12px rgba(29,158,117,0.15));
+  filter: drop-shadow(0 8px 24px rgba(29,158,117,0.12));
+  opacity: 0.95;
 }
 
-.heroText {
+/* ── RIGHT COLUMN: HERO CONTENT (ALL INTEGRATED) ───────────────────────────────── */
+.heroContentRight {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  height: 100%;
+  justify-content: flex-start;
 }
 
-.heroTitle {
-  font-size: 2.5rem;
+.platformBadge {
+  display: inline-block;
+  background: rgba(29,158,117,0.1);
+  border: 1px solid rgba(29,158,117,0.25);
+  color: var(--accent-default);
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+  letter-spacing: 0.3px;
+}
+
+.heroHeading {
+  font-size: 3rem;
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
-  letter-spacing: -0.02em;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
-.heroSubtitle {
-  font-size: 1rem;
+.heroDescription {
+  font-size: 1.05rem;
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.7;
+  line-height: 1.6;
   max-width: 450px;
+  font-weight: 400;
 }
 
-.heroCta {
+.heroCTAButton {
   align-self: flex-start;
-  padding: 14px 32px;
+  padding: 16px 40px;
   background: var(--accent-default);
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
-  box-shadow: 0 4px 16px rgba(29,158,117,0.3);
+  box-shadow: 0 6px 20px rgba(29,158,117,0.3);
+  letter-spacing: 0.5px;
 }
 
-.heroCta:hover {
+.heroCTAButton:hover {
   background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(29,158,117,0.4);
+  box-shadow: 0 10px 28px rgba(29,158,117,0.4);
 }
 
-/* ── FEATURES ROW ────────────────────────────────────────────────────────────────────── */
-.featuressRow {
+.heroCTAButton:active {
+  transform: translateY(0);
+}
+
+/* ── FEATURES GRID (2x2) - INTEGRATED WITHIN HERO ──────────────────────────────── */
+.featuresGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 0 auto;
-  max-width: 1000px;
-  margin: 0 auto;
-  width: 100%;
-  min-height: 100px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  margin-top: 8px;
 }
 
-.featureCompact {
+.featureItem {
   display: flex;
   gap: 12px;
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(29,158,117,0.08) 0%, rgba(16,185,129,0.04) 100%);
-  border: 1px solid rgba(29,158,117,0.15);
-  border-radius: 12px;
-  transition: all 0.3s ease;
   align-items: flex-start;
 }
 
-.featureCompact:hover {
-  background: linear-gradient(135deg, rgba(29,158,117,0.12) 0%, rgba(16,185,129,0.08) 100%);
-  border-color: rgba(29,158,117,0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(29,158,117,0.1);
-}
-
-.featureCompactIcon {
-  font-size: 1.5rem;
+.featureItem span:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(29,158,117,0.15);
+  border-radius: 50%;
+  color: var(--accent-default);
+  font-weight: 700;
+  font-size: 0.75rem;
   flex-shrink: 0;
   margin-top: 2px;
 }
 
-.featureCompactContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.featureCompactTitle {
-  font-size: 0.85rem;
-  font-weight: 700;
+.featureTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+  line-height: 1.3;
 }
 
-.featureCompactDesc {
-  font-size: 0.75rem;
+.featureDesc {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin: 0;
-  line-height: 1.4;
+  margin: 2px 0 0;
+  line-height: 1.3;
 }
 
-/* ── TRUST INDICATORS ────────────────────────────────────────────────────────────────── */
-.trustStrip {
+/* ── TRUST CHIPS - INTEGRATED INTO HERO ────────────────────────────────────────── */
+.trustChips {
   display: flex;
-  gap: 32px;
-  justify-content: center;
-  padding: 16px;
-  max-width: 1000px;
-  margin: 0 auto;
-  width: 100%;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
 }
 
-.trustItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.trustChip {
+  display: inline-block;
   font-size: 0.85rem;
   color: var(--text-secondary);
-}
-
-.trustIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  background: rgba(29,158,117,0.2);
-  border-radius: 50%;
-  color: var(--accent-default);
-  font-weight: 700;
-  font-size: 0.7rem;
-}
-
-.trustText {
+  padding: 6px 0;
   font-weight: 500;
 }
 
-/* ── REDESIGNED PROGRESS STEPPER ────────────────────────────────────────────────────── */
+.trustChip::before {
+  content: '';
+  margin-right: 6px;
+}
+
+/* ── REDESIGNED PROGRESS STEPPER ──────────────────────────────────────────────── */
 .stepBar {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   flex-wrap: nowrap;
   max-width: 100%;
   overflow-x: auto;
-  padding: 0 24px;
+  padding: 0 40px;
 }
 
 .stepNode {
@@ -364,18 +342,18 @@
 }
 
 .stepCircle {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: rgba(255,255,255,0.08);
   border: 2px solid rgba(255,255,255,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 0.8rem;
+  font-weight: 700;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   z-index: 2;
 }
@@ -384,8 +362,8 @@
   background: var(--accent-default);
   border-color: var(--accent-default);
   color: #fff;
-  box-shadow: 0 0 0 6px rgba(29,158,117,0.15);
-  transform: scale(1.08);
+  box-shadow: 0 0 0 8px rgba(29,158,117,0.15);
+  transform: scale(1.1);
 }
 
 .stepDone .stepCircle {
@@ -399,7 +377,7 @@
   font-weight: 600;
   color: var(--text-disabled);
   text-align: center;
-  width: 50px;
+  width: 55px;
   white-space: nowrap;
 }
 
@@ -413,7 +391,7 @@
 }
 
 .stepLine {
-  width: 32px;
+  width: 36px;
   height: 2px;
   background: rgba(255,255,255,0.08);
   margin: 0;
@@ -424,7 +402,7 @@
 
 .stepLineDone {
   background: var(--success-default);
-  box-shadow: 0 0 8px rgba(16,185,129,0.3);
+  box-shadow: 0 0 10px rgba(16,185,129,0.35);
 }
 
 .featureItem {
@@ -2252,60 +2230,76 @@
   }
 
   /* ── WELCOME SCREEN RESPONSIVE ────────────────────────────────────── */
-  .welcomeContainer {
-    height: auto;
-    min-height: 100vh;
-  }
-
-  .heroContent {
+  .welcomeHeroSingle {
     grid-template-columns: 1fr;
-    gap: 32px;
+    height: auto;
+    max-height: none;
+    gap: 24px;
+    padding: 24px;
   }
 
-  .heroTitle {
-    font-size: 2rem;
+  .heroVisualsLeft {
+    max-width: 100%;
+    height: auto;
+    min-height: 300px;
   }
 
-  .heroSubtitle {
+  .constructionSvg {
+    max-width: 100%;
+    max-height: 350px;
+  }
+
+  .heroHeading {
+    font-size: 2.2rem;
+  }
+
+  .heroDescription {
+    font-size: 1rem;
+  }
+
+  .heroCTAButton {
+    padding: 14px 32px;
     font-size: 0.95rem;
   }
 
-  .constructionGrid {
-    width: 200px;
-    height: 200px;
+  .featuresGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
   }
 
-  .featuressRow {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  .featureTitle {
+    font-size: 0.85rem;
   }
 
-  .featureCompact {
-    padding: 12px;
+  .featureDesc {
+    font-size: 0.75rem;
   }
 
-  .featureCompactIcon {
-    font-size: 1.2rem;
+  .trustChips {
+    gap: 10px;
   }
 
-  .trustStrip {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+  .trustChip {
+    font-size: 0.8rem;
   }
 
   .stepBar {
-    padding: 0 12px;
-    gap: 0;
+    padding: 0 20px;
+  }
+
+  .stepCircle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
   }
 
   .stepLabel {
-    width: 40px;
+    width: 48px;
     font-size: 0.65rem;
   }
 
   .stepLine {
-    width: 20px;
+    width: 28px;
   }
 
   /* ────────────────────────────────────────────────────────────────── */
@@ -2494,69 +2488,79 @@
 }
 
 @media (max-width: 480px) {
-  .welcomeContainer {
-    padding: 0 12px;
+  .welcomeHeroSingle {
+    padding: 16px;
     gap: 16px;
   }
 
-  .heroContent {
-    gap: 20px;
+  .heroVisualsLeft {
+    min-height: 240px;
   }
 
-  .heroTitle {
-    font-size: 1.6rem;
+  .constructionSvg {
+    max-height: 280px;
   }
 
-  .heroSubtitle {
+  .heroHeading {
+    font-size: 1.8rem;
+  }
+
+  .heroDescription {
     font-size: 0.9rem;
   }
 
-  .constructionGrid {
-    width: 160px;
-    height: 160px;
+  .heroCTAButton {
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
 
-  .featuressRow {
+  .featuresGrid {
     grid-template-columns: 1fr;
     gap: 10px;
   }
 
-  .featureCompact {
-    padding: 12px;
+  .featureItem {
+    gap: 10px;
   }
 
-  .trustStrip {
-    padding: 12px;
-    gap: 16px;
-  }
-
-  .trustItem {
+  .featureTitle {
     font-size: 0.8rem;
-    gap: 6px;
   }
 
-  .trustIcon {
-    width: 16px;
-    height: 16px;
-    font-size: 0.65rem;
+  .featureDesc {
+    font-size: 0.7rem;
+  }
+
+  .trustChips {
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .trustChip {
+    font-size: 0.75rem;
+  }
+
+  .platformBadge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
   }
 
   .stepBar {
-    padding: 0 8px;
+    padding: 0 12px;
   }
 
   .stepCircle {
     width: 32px;
     height: 32px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   .stepLabel {
-    width: 35px;
+    width: 40px;
     font-size: 0.6rem;
   }
 
   .stepLine {
-    width: 16px;
+    width: 20px;
   }
 }
