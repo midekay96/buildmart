@@ -1396,7 +1396,7 @@ export default function Estimator() {
       {saveMsg && <div className={styles.saveToast}>{saveMsg}</div>}
       <div className={styles.layout}>
         <main className={styles.main}>
-          <StepBar step={step} />
+          {step > 1 && <StepBar step={step} />}
 
           {/* ════ STEP 1 — WELCOME ════ */}
           {step === 1 && (
