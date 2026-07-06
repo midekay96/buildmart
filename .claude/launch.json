@@ -2,11 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "BuildMart Frontend",
-      "runtimeExecutable": "npm",
+      "name": "buildmart-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\npm",
       "runtimeArgs": ["start"],
-      "cwd": "buildmart",
-      "port": 3000
+      "cwd": "frontend",
+      "port": 3000,
+      "autoPort": false
     }
   ]
 }

@@ -1450,10 +1450,8 @@ export default function Estimator() {
 
               {/* CENTERED HERO CONTENT */}
               <div className={styles.heroContent}>
-                {/* Logo Badge */}
-                <div className={styles.logoBadge}>
-                  <img src="/logo-green.svg" alt="BuildMart Logo" className={styles.logoIcon} />
-                </div>
+                {/* Logo - Clean & Simple */}
+                <img src="/logo-green.svg" alt="BuildMart Logo" className={styles.welcomeLogoClean} />
 
                 {/* Main Heading */}
                 <h1 className={styles.heroTitle}>
