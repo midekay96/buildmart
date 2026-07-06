@@ -10,7 +10,7 @@
     "dev:backend": "cd backend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "cd backend && npm run build",
-    "start": "npm run dev:backend",
+    "start": "cd backend && node server.js",
     "test": "echo \"Run tests in individual packages\""
   },
   "keywords": ["marketplace", "building-materials", "ecommerce"],
