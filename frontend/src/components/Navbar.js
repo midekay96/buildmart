@@ -15,7 +15,7 @@ function Navbar({ activeTab, setActiveTab, cartCount }) {
   return (
     <nav className={styles.nav}>
       <div className={styles.logo}>
-        <div className={styles.logoIcon}>🏗</div>
+        <img src="/logo-green.svg" alt="BuildMart" className={styles.logoIcon} />
         BuildMart
       </div>
 
