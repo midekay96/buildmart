@@ -1452,7 +1452,7 @@ export default function Estimator() {
               <div className={styles.heroContent}>
                 {/* Logo Badge */}
                 <div className={styles.logoBadge}>
-                  <div className={styles.logoIcon}>🏢</div>
+                  <img src="/logo-green.svg" alt="BuildMart Logo" className={styles.logoIcon} />
                 </div>
 
                 {/* Main Heading */}

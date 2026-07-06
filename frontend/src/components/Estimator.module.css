@@ -218,11 +218,10 @@
 }
 
 .logoIcon {
-  font-size: 3rem;
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .heroTitle {
