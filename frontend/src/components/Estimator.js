@@ -1400,109 +1400,76 @@ export default function Estimator() {
 
           {/* ════ STEP 1 — WELCOME ════ */}
           {step === 1 && (
-            <div className={styles.welcomeCenteredHero}>
-              {/* Background Decorative Elements */}
-              <div className={styles.heroBgDecor}></div>
+            <div className={styles.welcomeHeroClean}>
+              {/* INDUSTRIAL BACKGROUND WITH TEAL ELEMENTS */}
+              <svg className={styles.industrialBg} viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#14b8a6" strokeWidth="0.5" opacity="0.05"/>
+                  </pattern>
+                </defs>
+                <rect width="1200" height="600" fill="url(#gridPattern)"/>
+
+                {/* Left Building Silhouettes */}
+                <g opacity="0.08">
+                  <rect x="20" y="350" width="80" height="250" fill="#14b8a6"/>
+                  <rect x="120" y="300" width="90" height="300" fill="#14b8a6"/>
+                  <rect x="230" y="400" width="70" height="200" fill="#14b8a6"/>
+                </g>
+
+                {/* Right Building Silhouettes */}
+                <g opacity="0.08">
+                  <rect x="1050" y="320" width="100" height="280" fill="#14b8a6"/>
+                  <rect x="920" y="350" width="90" height="250" fill="#14b8a6"/>
+                  <rect x="800" y="380" width="80" height="220" fill="#14b8a6"/>
+                </g>
+
+                {/* Crane Elements */}
+                <g opacity="0.06">
+                  {/* Left Crane */}
+                  <line x1="150" y1="100" x2="150" y2="350" stroke="#14b8a6" strokeWidth="8"/>
+                  <line x1="80" y1="120" x2="220" y2="120" stroke="#14b8a6" strokeWidth="6"/>
+                  <line x1="220" y1="120" x2="250" y2="280" stroke="#14b8a6" strokeWidth="4"/>
+
+                  {/* Right Crane */}
+                  <line x1="1050" y1="80" x2="1050" y2="300" stroke="#14b8a6" strokeWidth="8"/>
+                  <line x1="980" y1="100" x2="1120" y2="100" stroke="#14b8a6" strokeWidth="6"/>
+                  <line x1="980" y1="100" x2="950" y2="250" stroke="#14b8a6" strokeWidth="4"/>
+                </g>
+
+                {/* Scaffolding */}
+                <g opacity="0.07">
+                  <line x1="400" y1="200" x2="400" y2="500" stroke="#14b8a6" strokeWidth="3"/>
+                  <line x1="450" y1="200" x2="450" y2="500" stroke="#14b8a6" strokeWidth="3"/>
+                  <line x1="400" y1="250" x2="450" y2="250" stroke="#14b8a6" strokeWidth="2"/>
+                  <line x1="400" y1="320" x2="450" y2="320" stroke="#14b8a6" strokeWidth="2"/>
+                  <line x1="400" y1="390" x2="450" y2="390" stroke="#14b8a6" strokeWidth="2"/>
+                  <line x1="400" y1="460" x2="450" y2="460" stroke="#14b8a6" strokeWidth="2"/>
+                </g>
+              </svg>
 
               {/* CENTERED HERO CONTENT */}
-              <div className={styles.heroMainContent}>
-                {/* Construction Crane Illustration */}
-                <div className={styles.craneIllustration}>
-                  <svg viewBox="0 0 200 200" className={styles.craneSvg}>
-                    {/* Crane Mast */}
-                    <rect x="90" y="20" width="20" height="140" fill="#D97706" opacity="0.9"/>
-
-                    {/* Crane Jib (horizontal arm) */}
-                    <rect x="30" y="40" width="140" height="12" fill="#D97706" opacity="0.85" rx="2"/>
-
-                    {/* Trolley */}
-                    <circle cx="100" cy="46" r="8" fill="#D97706" opacity="0.9"/>
-
-                    {/* Cable */}
-                    <line x1="100" y1="54" x2="100" y2="120" stroke="#666" strokeWidth="2" opacity="0.6"/>
-
-                    {/* Hook */}
-                    <g>
-                      <path d="M 95 120 Q 95 135 100 140 Q 105 135 105 120" fill="none" stroke="#666" strokeWidth="2" opacity="0.6"/>
-                    </g>
-
-                    {/* Load (red container) */}
-                    <rect x="75" y="140" width="50" height="40" fill="#EF4444" opacity="0.85" rx="4"/>
-                    <rect x="78" y="143" width="44" height="34" fill="#DC2626" opacity="0.7"/>
-                  </svg>
+              <div className={styles.heroContent}>
+                {/* Logo Badge */}
+                <div className={styles.logoBadge}>
+                  <div className={styles.logoIcon}>🏢</div>
                 </div>
 
                 {/* Main Heading */}
-                <h1 className={styles.centeredHeroTitle}>
+                <h1 className={styles.heroTitle}>
                   Welcome to BuildMart Estimator
                 </h1>
 
                 {/* Description */}
-                <p className={styles.centeredHeroDescription}>
+                <p className={styles.heroSubtitle}>
                   Get accurate, detailed cost estimates for your building projects in minutes.<br/>
                   From residential homes to commercial complexes, we've got you covered.
                 </p>
 
                 {/* Primary CTA */}
-                <button className={styles.centeredCTAButton} onClick={next}>
+                <button className={styles.heroCTA} onClick={next}>
                   Get Started →
                 </button>
-              </div>
-
-              {/* 4 FEATURE CARDS - HORIZONTAL ROW */}
-              <div className={styles.featuresRow}>
-                <div className={styles.featureCard}>
-                  <div className={styles.featureCardIcon}>📋</div>
-                  <h3 className={styles.featureCardTitle}>Accurate Estimation</h3>
-                  <p className={styles.featureCardDesc}>Detailed BOQ and cost estimates with real-time market rates.</p>
-                </div>
-                <div className={styles.featureCard}>
-                  <div className={styles.featureCardIcon}>🧱</div>
-                  <h3 className={styles.featureCardTitle}>Material Analysis</h3>
-                  <p className={styles.featureCardDesc}>Get precise material quantities and cost breakdowns.</p>
-                </div>
-                <div className={styles.featureCard}>
-                  <div className={styles.featureCardIcon}>📦</div>
-                  <h3 className={styles.featureCardTitle}>3D Project Preview</h3>
-                  <p className={styles.featureCardDesc}>Visualize your project in 3D before construction.</p>
-                </div>
-                <div className={styles.featureCard}>
-                  <div className={styles.featureCardIcon}>🤝</div>
-                  <h3 className={styles.featureCardTitle}>Supplier Integration</h3>
-                  <p className={styles.featureCardDesc}>Compare supplier quotes and get the best market deals.</p>
-                </div>
-              </div>
-
-              {/* TRUST INDICATORS - HORIZONTAL ROW */}
-              <div className={styles.trustRow}>
-                <div className={styles.trustItem}>
-                  <span className={styles.trustCheckmark}>✓</span>
-                  <div>
-                    <div className={styles.trustLabel}>Trusted by 500+ Builders</div>
-                    <div className={styles.trustSubtext}>Across residential & commercial projects</div>
-                  </div>
-                </div>
-                <div className={styles.trustItem}>
-                  <span className={styles.trustCheckmark}>⏱️</span>
-                  <div>
-                    <div className={styles.trustLabel}>Save Time</div>
-                    <div className={styles.trustSubtext}>Estimates in under 5 minutes</div>
-                  </div>
-                </div>
-                <div className={styles.trustItem}>
-                  <span className={styles.trustCheckmark}>✓</span>
-                  <div>
-                    <div className={styles.trustLabel}>99% Accuracy</div>
-                    <div className={styles.trustSubtext}>Reliable & precise calculations</div>
-                  </div>
-                </div>
-                <div className={styles.trustItem}>
-                  <span className={styles.trustCheckmark}>🔒</span>
-                  <div>
-                    <div className={styles.trustLabel}>Secure & Private</div>
-                    <div className={styles.trustSubtext}>Your data is always protected</div>
-                  </div>
-                </div>
               </div>
             </div>
           )}

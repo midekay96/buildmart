@@ -156,36 +156,33 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
-/* WELCOME SCREEN — CENTERED HERO REDESIGN (Matching Screenshot) */
+/* WELCOME SCREEN — CLEAN MINIMAL HERO WITH INDUSTRIAL BACKGROUND */
 /* ─────────────────────────────────────────────────────────────────────────────────────── */
 
-.welcomeCenteredHero {
+.welcomeHeroClean {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 180px);
   padding: 40px 24px;
-  position: relative;
-  gap: 48px;
-  animation: fadeIn 0.5s ease;
+  overflow: hidden;
 }
 
-.heroBgDecor {
+.industrialBg {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(29,158,117,0.04) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(29,158,117,0.03) 0%, transparent 50%);
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
   z-index: 0;
+  pointer-events: none;
 }
 
-/* ── CENTERED HERO MAIN CONTENT ──────────────────────────────────────────────────── */
-.heroMainContent {
+/* ── HERO CONTENT - CENTERED ─────────────────────────────────────────────────────── */
+.heroContent {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -193,162 +190,80 @@
   gap: 24px;
   max-width: 700px;
   text-align: center;
-  z-index: 1;
 }
 
-.craneIllustration {
-  width: 120px;
-  height: 120px;
+.logoBadge {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--accent-default) 0%, #10b981 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  box-shadow: 0 8px 24px rgba(29,158,117,0.25);
+  animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.craneSvg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 4px 12px rgba(217,119,6,0.2));
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.centeredHeroTitle {
-  font-size: 3.2rem;
+.logoIcon {
+  font-size: 2.5rem;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
   font-weight: 800;
-  color: var(--accent-default);
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  animation: slideDown 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
 }
 
-.centeredHeroDescription {
-  font-size: 1.05rem;
+.heroSubtitle {
+  font-size: 1.08rem;
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.7;
   max-width: 600px;
   font-weight: 400;
+  animation: slideDown 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 
-.centeredCTAButton {
-  padding: 16px 48px;
+.heroCTA {
+  padding: 18px 56px;
   background: var(--accent-default);
   color: #fff;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-family: inherit;
-  box-shadow: 0 8px 24px rgba(29,158,117,0.3);
+  box-shadow: 0 10px 32px rgba(29,158,117,0.35);
   letter-spacing: 0.5px;
-  margin-top: 8px;
+  margin-top: 16px;
+  animation: slideDown 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
 }
 
-.centeredCTAButton:hover {
+.heroCTA:hover {
   background: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(29,158,117,0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(29,158,117,0.45);
 }
 
-.centeredCTAButton:active {
-  transform: translateY(0);
-}
-
-/* ── 4 FEATURE CARDS - HORIZONTAL ROW ────────────────────────────────────────────── */
-.featuresRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  width: 100%;
-  max-width: 1000px;
-  z-index: 1;
-}
-
-.featureCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 28px 20px;
-  background: linear-gradient(135deg, rgba(29,158,117,0.05) 0%, rgba(16,185,129,0.02) 100%);
-  border: 1px solid rgba(29,158,117,0.12);
-  border-radius: 14px;
-  transition: all 0.3s ease;
-}
-
-.featureCard:hover {
-  background: linear-gradient(135deg, rgba(29,158,117,0.08) 0%, rgba(16,185,129,0.05) 100%);
-  border-color: rgba(29,158,117,0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(29,158,117,0.12);
-}
-
-.featureCardIcon {
-  font-size: 2.5rem;
-  margin-bottom: 12px;
-}
-
-.featureCardTitle {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 8px;
-  line-height: 1.3;
-}
-
-.featureCardDesc {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ── TRUST INDICATORS - HORIZONTAL ROW ───────────────────────────────────────────── */
-.trustRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  width: 100%;
-  max-width: 1000px;
-  padding: 32px 0;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  z-index: 1;
-}
-
-.trustItem {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.trustCheckmark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: rgba(29,158,117,0.15);
-  border-radius: 50%;
-  color: var(--accent-default);
-  font-weight: 700;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-
-.trustLabel {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.3;
-}
-
-.trustSubtext {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin: 4px 0 0;
-  line-height: 1.4;
+.heroCTA:active {
+  transform: translateY(-1px);
 }
 
 /* ── REDESIGNED PROGRESS STEPPER ──────────────────────────────────────────────── */
@@ -2262,58 +2177,36 @@
   }
 
   /* ── WELCOME SCREEN RESPONSIVE ────────────────────────────────────── */
-  .welcomeCenteredHero {
+  .welcomeHeroClean {
     padding: 32px 20px;
-    gap: 40px;
-    min-height: auto;
+    min-height: calc(100vh - 140px);
   }
 
-  .craneIllustration {
-    width: 100px;
-    height: 100px;
+  .heroContent {
+    gap: 20px;
   }
 
-  .centeredHeroTitle {
-    font-size: 2.4rem;
+  .logoBadge {
+    width: 70px;
+    height: 70px;
   }
 
-  .centeredHeroDescription {
+  .logoIcon {
+    font-size: 2.2rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
     font-size: 0.95rem;
     max-width: 500px;
   }
 
-  .centeredCTAButton {
-    padding: 14px 40px;
+  .heroCTA {
+    padding: 16px 40px;
     font-size: 0.95rem;
-  }
-
-  .featuresRow {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    max-width: 100%;
-  }
-
-  .featureCard {
-    padding: 20px 16px;
-  }
-
-  .featureCardIcon {
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
-
-  .featureCardTitle {
-    font-size: 0.9rem;
-  }
-
-  .featureCardDesc {
-    font-size: 0.8rem;
-  }
-
-  .trustRow {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 24px 0;
   }
 
   .stepBar {
@@ -2521,73 +2414,37 @@
 }
 
 @media (max-width: 480px) {
-  .welcomeCenteredHero {
-    padding: 20px 16px;
-    gap: 32px;
+  .welcomeHeroClean {
+    padding: 24px 16px;
+    min-height: calc(100vh - 120px);
   }
 
-  .craneIllustration {
-    width: 90px;
-    height: 90px;
-  }
-
-  .centeredHeroTitle {
-    font-size: 1.9rem;
-  }
-
-  .centeredHeroDescription {
-    font-size: 0.9rem;
-  }
-
-  .centeredCTAButton {
-    padding: 12px 32px;
-    font-size: 0.9rem;
-  }
-
-  .featuresRow {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .featureCard {
-    padding: 16px 12px;
-  }
-
-  .featureCardIcon {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-  }
-
-  .featureCardTitle {
-    font-size: 0.85rem;
-  }
-
-  .featureCardDesc {
-    font-size: 0.75rem;
-  }
-
-  .trustRow {
-    grid-template-columns: 1fr;
+  .heroContent {
     gap: 16px;
-    padding: 20px 0;
   }
 
-  .trustItem {
-    gap: 10px;
+  .logoBadge {
+    width: 60px;
+    height: 60px;
   }
 
-  .trustCheckmark {
-    width: 22px;
-    height: 22px;
-    font-size: 0.8rem;
+  .logoIcon {
+    font-size: 1.8rem;
   }
 
-  .trustLabel {
-    font-size: 0.85rem;
+  .heroTitle {
+    font-size: 2rem;
   }
 
-  .trustSubtext {
-    font-size: 0.75rem;
+  .heroSubtitle {
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  .heroCTA {
+    padding: 14px 32px;
+    font-size: 0.9rem;
+    margin-top: 12px;
   }
 
   .stepBar {
