@@ -46,17 +46,17 @@ function OrdersPage() {
           <tbody>
             {orders.map(o => (
               <tr key={o.id}>
-                <td>{o.id}</td>
-                <td>{o.customer} · {o.location}</td>
-                <td>{o.items}</td>
-                <td className={styles.mono}>{o.amount}</td>
-                <td>{o.method}</td>
+                <td>{o.orderNumber || o.id}</td>
+                <td>{o.shippingAddress?.name || 'Customer'} · {o.shippingAddress?.state || 'N/A'}</td>
+                <td>{o.items?.length || 0} items</td>
+                <td className={styles.mono}>₦{Number(o.totalAmount).toLocaleString()}</td>
+                <td>{o.paymentStatus || 'pending'}</td>
                 <td><StatusBadge status={o.status} /></td>
-                <td>{o.date}</td>
+                <td>{new Date(o.createdAt).toLocaleDateString('en-GB')}</td>
                 <td style={{ display: 'flex', gap: 4 }}>
                   <button className={styles.actionBtn}>View</button>
-                  {o.status === 'Processing' && <button className={styles.actionBtn}>Ship</button>}
-                  {o.status === 'Pending' && <button className={`${styles.actionBtn} ${styles.actionBtnRed}`}>Cancel</button>}
+                  {o.status === 'processing' && <button className={styles.actionBtn}>Ship</button>}
+                  {o.status === 'pending' && <button className={`${styles.actionBtn} ${styles.actionBtnRed}`}>Cancel</button>}
                 </td>
               </tr>
             ))}
