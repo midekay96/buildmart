@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import KpiCard from '../components/KpiCard';
 import StatusBadge from '../components/StatusBadge';
-import { getOrders, getKpiData } from '../../services/api';
-import { activities, topCategories } from '../adminData';
+import { getOrders } from '../../services/api';
+import { kpiData, activities, topCategories } from '../adminData';
 import styles from './Pages.module.css';
 
 function DashboardPage({ setActivePage }) {
-  const [kpiData, setKpiData] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [kpiRes, ordersRes] = await Promise.all([getKpiData(), getOrders()]);
-        setKpiData(kpiRes?.data || {});
+        const ordersRes = await getOrders();
         setRecentOrders(ordersRes?.data || []);
       } catch (err) {
-        console.error('Failed to load dashboard data:', err);
+        console.error('Failed to load orders:', err);
       } finally {
         setLoading(false);
       }
@@ -25,7 +23,7 @@ function DashboardPage({ setActivePage }) {
     loadData();
   }, []);
 
-  if (loading || !kpiData) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
