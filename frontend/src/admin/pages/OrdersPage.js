@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import KpiCard from '../components/KpiCard';
 import StatusBadge from '../components/StatusBadge';
-import { recentOrders } from '../adminData';
+import { getOrders } from '../../services/api';
 import styles from './Pages.module.css';
 
 function OrdersPage() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const res = await getOrders();
+        setOrders(res?.data || []);
+      } catch (err) {
+        console.error('Failed to load orders:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadOrders();
+  }, []);
+
+  if (loading) return <div>Loading orders...</div>;
+
   return (
     <div>
       <div className={styles.kpiRow}>
@@ -25,7 +44,7 @@ function OrdersPage() {
         <table className={styles.table}>
           <thead><tr><th>Order ID</th><th>Customer</th><th>Products</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
           <tbody>
-            {recentOrders.map(o => (
+            {orders.map(o => (
               <tr key={o.id}>
                 <td>{o.id}</td>
                 <td>{o.customer} · {o.location}</td>
