@@ -12,7 +12,7 @@ const CartItem = sequelize.define('CartItem', {
     allowNull: false
   },
   productId: {
-    type: DataTypes.UUID,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   quantity: {

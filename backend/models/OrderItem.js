@@ -12,7 +12,7 @@ const OrderItem = sequelize.define('OrderItem', {
     allowNull: false
   },
   productId: {
-    type: DataTypes.UUID,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   quantity: {
