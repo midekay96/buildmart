@@ -27,13 +27,7 @@
 }
 
 .logoText {
-  display: none;
-}
-
-@media (min-width: 641px) {
-  .logoText {
-    display: inline;
-  }
+  display: inline;
 }
 
 .logoIcon {
@@ -171,22 +165,19 @@
 /* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .nav {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     height: 52px;
     position: relative;
   }
 
   .logo {
-    font-size: 16px;
+    font-size: 14px;
+    gap: 4px;
   }
 
   .logoIcon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .logoText {
-    display: none;
+    width: 22px;
+    height: 22px;
   }
 
   .links {
@@ -195,20 +186,34 @@
 
   .menuBtn {
     display: block;
+    font-size: 20px;
+    padding: 4px 6px;
+    margin: 0 2px;
   }
 
   .mobileMenu {
     display: flex;
   }
 
+  .mobileLink {
+    font-size: 13px;
+    padding: 10px 1rem;
+  }
+
+  .themeBtn {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
   .cartBtn {
-    padding: 6px 10px;
-    font-size: 12px;
-    gap: 4px;
+    padding: 5px 8px;
+    font-size: 11px;
+    gap: 3px;
   }
 
   .badge {
-    padding: 0px 4px;
-    font-size: 10px;
+    padding: 0px 3px;
+    font-size: 9px;
   }
 }
