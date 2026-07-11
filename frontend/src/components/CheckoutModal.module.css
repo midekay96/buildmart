@@ -433,34 +433,68 @@
     font-size: 10px;
   }
 
+  .payPanel {
+    margin-bottom: 0.5rem;
+  }
+
   .cardPreview {
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .cardPreviewTop {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 16px;
   }
 
   .cardNumber {
-    font-size: 14px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .cardFieldLabel {
+    font-size: 8px;
+    margin-bottom: 2px;
+  }
+
+  .cardFieldVal {
+    font-size: 11px;
+  }
+
+  .secureBadge {
+    font-size: 10px;
+    margin-top: 6px;
   }
 
   .transferInfo {
-    padding: 1rem;
-    margin-bottom: 10px;
+    padding: 0.75rem;
+    margin-bottom: 8px;
   }
 
   .transferBankName {
-    font-size: 13px;
+    font-size: 12px;
+    margin-bottom: 8px;
   }
 
   .transferRow {
-    font-size: 12px;
+    font-size: 11px;
+    padding: 6px 0;
   }
 
   .transferAmt {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .copyBtn {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .transferNote {
+    font-size: 11px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
   }
 
   .ussdGrid {
