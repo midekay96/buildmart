@@ -103,3 +103,227 @@
 .toggle input:checked + .toggleTrack { background: #1D9E75; }
 .toggleTrack::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform 0.2s; }
 .toggle input:checked + .toggleTrack::after { transform: translateX(16px); }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .kpiRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .tableCard {
+    margin-bottom: 16px;
+  }
+
+  .table th, .table td {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .table th {
+    font-size: 10px;
+  }
+
+  .bottomRow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .miniCard {
+    padding: 14px;
+  }
+
+  .miniTitle {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .activityItem, .catRow {
+    padding: 6px 0;
+    gap: 6px;
+  }
+
+  .actDot {
+    width: 6px;
+    height: 6px;
+    margin-top: 2px;
+  }
+
+  .actText {
+    font-size: 11px;
+  }
+
+  .actTime {
+    font-size: 10px;
+  }
+
+  .catName {
+    min-width: 100px;
+    font-size: 11px;
+  }
+
+  .catBarWrap {
+    margin: 0 8px;
+  }
+
+  .catNum {
+    font-size: 11px;
+  }
+
+  .formSection {
+    padding: 14px;
+  }
+
+  .formSectionTitle {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .fLabel {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .fInput, .fSelect, .fTextarea {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .fTextarea {
+    min-height: 60px;
+  }
+
+  .kpiCard {
+    padding: 14px 16px;
+  }
+
+  .kpiLabel {
+    font-size: 10px;
+  }
+
+  .kpiValue {
+    font-size: 20px;
+  }
+
+  .customerCell {
+    gap: 8px;
+  }
+
+  .customerName {
+    font-size: 12px;
+  }
+
+  .newBadge {
+    font-size: 8px;
+  }
+
+  .reportCard {
+    padding: 14px;
+    gap: 8px;
+  }
+
+  .reportIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .reportTitle {
+    font-size: 13px;
+  }
+
+  .reportDesc {
+    font-size: 11px;
+  }
+
+  .reportDate, .reportFormat {
+    font-size: 10px;
+  }
+
+  .reportBtn {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  .settingRow {
+    padding: 12px 14px;
+    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .settingLabel {
+    font-size: 12px;
+  }
+
+  .settingDesc {
+    font-size: 10px;
+  }
+
+  .settingInput {
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  .settingSelect {
+    width: 100%;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpiRow {
+    grid-template-columns: 1fr;
+  }
+
+  .table th, .table td {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .table th {
+    font-size: 9px;
+  }
+
+  .tableHeader {
+    padding: 10px 12px;
+  }
+
+  .tableTitle {
+    font-size: 12px;
+  }
+
+  .miniCard {
+    padding: 10px;
+  }
+
+  .miniTitle {
+    font-size: 11px;
+  }
+
+  .formSection {
+    padding: 10px;
+  }
+
+  .formSectionTitle {
+    font-size: 11px;
+  }
+
+  .kpiCard {
+    padding: 10px 12px;
+  }
+
+  .kpiLabel {
+    font-size: 9px;
+  }
+
+  .kpiValue {
+    font-size: 18px;
+  }
+}

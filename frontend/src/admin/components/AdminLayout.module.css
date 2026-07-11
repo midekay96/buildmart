@@ -48,3 +48,77 @@
 
 .themeBtn { background: #1C2330; border: 1px solid #30363D; color: #8B949E; border-radius: 8px; padding: 6px 10px; font-size: 14px; cursor: pointer; transition: all 0.12s; line-height: 1; }
 .themeBtn:hover { border-color: #1D9E75; color: #9FE1CB; }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    padding: 0 16px;
+    height: 48px;
+  }
+
+  .pageTitle {
+    font-size: 14px;
+  }
+
+  .pageDate {
+    font-size: 11px;
+  }
+
+  .searchBox {
+    width: 150px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    padding: 0 12px;
+    flex-direction: column;
+    height: auto;
+    gap: 8px;
+  }
+
+  .topbarLeft {
+    gap: 8px;
+  }
+
+  .topbarRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pageTitle {
+    font-size: 13px;
+  }
+
+  .pageDate {
+    font-size: 10px;
+  }
+
+  .searchBox {
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  .btn {
+    padding: 6px 8px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+}

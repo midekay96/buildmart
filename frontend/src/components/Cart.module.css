@@ -144,3 +144,104 @@
   color: var(--text-secondary);
   margin-top: 8px;
 }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+
+  .empty {
+    padding: 2rem 1rem;
+  }
+
+  .emptyIcon {
+    font-size: 36px;
+  }
+
+  .emptyText {
+    font-size: 14px;
+  }
+
+  .browseBtn {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  .item {
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+  }
+
+  .itemImg {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .itemName {
+    font-size: 12px;
+  }
+
+  .itemUnit {
+    font-size: 10px;
+  }
+
+  .qtyControls {
+    gap: 6px;
+  }
+
+  .qtyControls button {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+
+  .qtyControls span {
+    font-size: 12px;
+    min-width: 14px;
+  }
+
+  .itemTotal {
+    min-width: 70px;
+  }
+
+  .itemPrice {
+    font-size: 12px;
+  }
+
+  .itemEach {
+    font-size: 9px;
+  }
+
+  .summary {
+    padding: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .summRow {
+    font-size: 12px;
+    padding: 5px 0;
+  }
+
+  .grandVal {
+    font-size: 16px;
+  }
+
+  .checkoutBtn {
+    padding: 10px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .secureNote {
+    font-size: 10px;
+  }
+}

@@ -405,13 +405,244 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 640px) {
-  .cardHead { grid-template-columns: 1fr 1fr; }
-  .cardMid  { align-items: flex-start; }
-  .cardRight{ align-items: flex-start; }
-  .stageLabel { font-size: 0.52rem; max-width: 50px; }
-  .stageDot   { width: 26px; height: 26px; }
-  .stageLine  { top: 13px; }
-  .etaAddr    { display: none; }
-  .wrapper    { padding: 20px 12px 40px; }
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 24px 16px 60px;
+  }
+
+  .pageTitle {
+    font-size: 1.25rem;
+  }
+
+  .pageSub {
+    font-size: 0.76rem;
+  }
+
+  .cardHead {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .cardMid {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .cardRight {
+    align-items: flex-start;
+  }
+
+  .total {
+    font-size: 0.95rem;
+  }
+
+  .expandBtn {
+    padding: 3px 8px;
+  }
+
+  .stageTracker {
+    padding: 12px 16px;
+    overflow-x: auto;
+  }
+
+  .stageStep {
+    min-width: 50px;
+  }
+
+  .stageDot {
+    width: 28px;
+    height: 28px;
+    font-size: 0.65rem;
+  }
+
+  .stageLabel {
+    font-size: 0.5rem;
+    max-width: 45px;
+  }
+
+  .stageLine {
+    top: 14px;
+  }
+
+  .etaStrip {
+    padding: 8px 16px;
+    font-size: 0.72rem;
+  }
+
+  .etaIcon {
+    font-size: 0.9rem;
+  }
+
+  .etaAddr {
+    display: none;
+  }
+
+  .expandedBody {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .sectionHead {
+    font-size: 0.7rem;
+  }
+
+  .itemsTable {
+    font-size: 0.76rem;
+  }
+
+  .itemsTable th {
+    padding: 6px 8px;
+    font-size: 0.65rem;
+  }
+
+  .itemsTable td {
+    padding: 7px 8px;
+  }
+
+  .timelineItem {
+    gap: 12px;
+    padding: 8px 0 8px 20px;
+  }
+
+  .timelineDot {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+    left: -13px;
+    top: 8px;
+  }
+
+  .timelineLabel {
+    font-size: 0.78rem;
+  }
+
+  .timelineNote {
+    font-size: 0.7rem;
+  }
+
+  .timelineTime {
+    font-size: 0.65rem;
+  }
+
+  .supportBtn, .rateBtn {
+    padding: 7px 14px;
+    font-size: 0.76rem;
+  }
+
+  .supportPanel {
+    padding: 14px;
+  }
+
+  .supportTitle {
+    font-size: 0.85rem;
+  }
+
+  .supportNote {
+    font-size: 0.72rem;
+  }
+
+  .supportLink {
+    font-size: 0.76rem;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 16px 12px 40px;
+  }
+
+  .pageTitle {
+    font-size: 1.1rem;
+  }
+
+  .pageSub {
+    font-size: 0.7rem;
+  }
+
+  .bridgeNote {
+    padding: 10px 12px;
+    font-size: 0.76rem;
+    margin-bottom: 16px;
+  }
+
+  .cardHead {
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+  }
+
+  .orderId {
+    font-size: 0.85rem;
+  }
+
+  .orderDate {
+    font-size: 0.7rem;
+  }
+
+  .cardMid {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .statusBadge {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+
+  .deliveryBadge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .cardRight {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .total {
+    font-size: 0.9rem;
+  }
+
+  .stageTracker {
+    padding: 10px 12px;
+  }
+
+  .stageStep {
+    min-width: 40px;
+  }
+
+  .stageDot {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stageLabel {
+    font-size: 0.48rem;
+    max-width: 40px;
+  }
+
+  .stageTrackerContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .itemsTable {
+    font-size: 0.7rem;
+  }
+
+  .itemsTable th {
+    padding: 5px 6px;
+  }
+
+  .itemsTable td {
+    padding: 6px 6px;
+  }
+
+  .expandedBody {
+    padding: 12px;
+    gap: 16px;
+  }
 }

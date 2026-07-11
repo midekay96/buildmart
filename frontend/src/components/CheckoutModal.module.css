@@ -303,3 +303,282 @@
   cursor: pointer;
   line-height: 1.5;
 }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .overlay {
+    padding: 1rem 0.5rem;
+  }
+
+  .modal {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 0.5rem;
+    max-height: 90vh;
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .headerTitle {
+    font-size: 15px;
+  }
+
+  .closeBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .stepper {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stepWrap {
+    gap: 4px;
+  }
+
+  .stepDot {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+
+  .stepLabel {
+    font-size: 11px;
+  }
+
+  .stepLine {
+    margin: 0 4px;
+  }
+
+  .body {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 13px;
+    margin-bottom: 0.75rem;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .spanFull {
+    grid-column: auto;
+  }
+
+  .fLabel {
+    gap: 4px;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .fInput, .fSelect {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .deliveryOpts {
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .delOpt {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .delOptIcon {
+    font-size: 18px;
+  }
+
+  .delOptTitle {
+    font-size: 12px;
+  }
+
+  .delOptSub {
+    font-size: 10px;
+  }
+
+  .delOptPrice {
+    font-size: 12px;
+  }
+
+  .methodTabs {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .methodTab {
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  .methodIcon {
+    font-size: 18px;
+  }
+
+  .methodName {
+    font-size: 11px;
+  }
+
+  .methodSub {
+    font-size: 10px;
+  }
+
+  .cardPreview {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cardPreviewTop {
+    margin-bottom: 1rem;
+  }
+
+  .cardNumber {
+    font-size: 14px;
+  }
+
+  .transferInfo {
+    padding: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .transferBankName {
+    font-size: 13px;
+  }
+
+  .transferRow {
+    font-size: 12px;
+  }
+
+  .transferAmt {
+    font-size: 14px;
+  }
+
+  .ussdGrid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .ussdCard {
+    padding: 8px;
+  }
+
+  .ussdBank {
+    font-size: 11px;
+  }
+
+  .ussdCode {
+    font-size: 10px;
+  }
+
+  .orderItems {
+    max-height: 150px;
+    padding: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .orderItem {
+    font-size: 12px;
+    padding: 5px 0;
+  }
+
+  .orderItemIcon {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  .confirmMeta {
+    margin-bottom: 0.75rem;
+  }
+
+  .confirmRow {
+    font-size: 12px;
+  }
+
+  .grandTotal {
+    padding: 10px 0;
+    font-size: 14px;
+    margin-bottom: 1rem;
+  }
+
+  .navRow {
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .backBtn {
+    padding: 9px 14px;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .nextBtn {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  .payBtn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .successScreen {
+    padding: 1.5rem;
+  }
+
+  .successCircle {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    margin-bottom: 1rem;
+  }
+
+  .successTitle {
+    font-size: 18px;
+  }
+
+  .successSub {
+    font-size: 12px;
+  }
+
+  .successMeta {
+    padding: 0.75rem;
+  }
+
+  .metaRow {
+    font-size: 12px;
+  }
+
+  .doneBtn {
+    padding: 10px 24px;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .refundPolicy {
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .refundPolicyTitle {
+    font-size: 12px;
+  }
+
+  .refundPolicyText {
+    font-size: 11px;
+  }
+
+  .refundAckRow {
+    font-size: 11px;
+  }
+}

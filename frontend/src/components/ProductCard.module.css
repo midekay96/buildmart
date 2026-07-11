@@ -147,3 +147,67 @@
 .addBtn.added {
   background: var(--success-default);
 }
+
+/* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .card {
+    border-radius: var(--radius-md);
+  }
+
+  .imgArea {
+    height: 120px;
+  }
+
+  .icon {
+    font-size: 36px;
+  }
+
+  .badge {
+    top: 6px;
+    left: 6px;
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .body {
+    padding: 10px;
+  }
+
+  .brand {
+    font-size: 9px;
+    margin-bottom: 2px;
+  }
+
+  .name {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .unit {
+    font-size: 10px;
+  }
+
+  .supplierTag {
+    font-size: 9px;
+    padding: 1px 5px;
+    margin-top: 3px;
+  }
+
+  .footer {
+    margin-top: 6px;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+
+  .oldPrice {
+    font-size: 10px;
+  }
+
+  .addBtn {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+}
