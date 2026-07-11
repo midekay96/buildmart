@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Navbar.module.css';
 import { useTheme } from '../ThemeContext';
 
@@ -10,25 +10,60 @@ const tabs = [
 
 function Navbar({ activeTab, setActiveTab, cartCount }) {
   const { theme, toggleTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleNavClick = (tabId) => {
+    setActiveTab(tabId);
+    setMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    handleNavClick('shop');
+  };
 
   return (
     <nav className={styles.nav}>
-      <div className={styles.logo}>
+      <div className={styles.logo} onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
         <img src="/logo-green.svg" alt="BuildMart" className={styles.logoIcon} />
-        BuildMart
+        <span className={styles.logoText}>BuildMart</span>
       </div>
 
+      {/* Desktop Navigation */}
       <div className={styles.links}>
         {tabs.map(t => (
           <span
             key={t.id}
             className={`${styles.link} ${activeTab === t.id ? styles.active : ''}`}
-            onClick={() => setActiveTab(t.id)}
+            onClick={() => handleNavClick(t.id)}
           >
             {t.label}
           </span>
         ))}
       </div>
+
+      {/* Mobile Menu Button */}
+      <button
+        className={styles.menuBtn}
+        onClick={() => setMenuOpen(!menuOpen)}
+        title="Toggle menu"
+      >
+        ☰
+      </button>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className={styles.mobileMenu}>
+          {tabs.map(t => (
+            <span
+              key={t.id}
+              className={`${styles.mobileLink} ${activeTab === t.id ? styles.active : ''}`}
+              onClick={() => handleNavClick(t.id)}
+            >
+              {t.label}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className={styles.actions}>
         <button
@@ -38,7 +73,7 @@ function Navbar({ activeTab, setActiveTab, cartCount }) {
         >
           {theme === 'dark' ? '☀' : '🌙'}
         </button>
-        <button className={styles.cartBtn} onClick={() => setActiveTab('cart')}>
+        <button className={styles.cartBtn} onClick={() => handleNavClick('cart')}>
           🛒 Cart <span className={styles.badge}>{cartCount}</span>
         </button>
       </div>

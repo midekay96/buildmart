@@ -18,6 +18,22 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoText {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .logoText {
+    display: inline;
+  }
 }
 
 .logoIcon {
@@ -107,11 +123,57 @@
 }
 .themeBtn:hover { background: var(--surface-elevated); border-color: var(--border-emphasis); }
 
+.menuBtn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.mobileMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface-section);
+  border-bottom: 1px solid var(--border-default);
+  flex-direction: column;
+  gap: 0;
+  padding: 12px 0;
+  z-index: 99;
+}
+
+.mobileLink {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 1rem;
+  transition: all 0.2s;
+}
+
+.mobileLink:hover {
+  background: var(--surface-interactive);
+  color: var(--text-primary);
+}
+
+.mobileLink.active {
+  color: var(--accent-default);
+  background: var(--accent-bg);
+  font-weight: 600;
+}
+
 /* ── Mobile Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .nav {
     padding: 0 1rem;
     height: 52px;
+    position: relative;
   }
 
   .logo {
@@ -123,17 +185,20 @@
     height: 24px;
   }
 
-  .links {
-    display: flex;
-    gap: 0.8rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .logoText {
+    display: none;
   }
 
-  .link {
-    font-size: 11px;
-    padding: 4px 0;
-    white-space: nowrap;
+  .links {
+    display: none;
+  }
+
+  .menuBtn {
+    display: block;
+  }
+
+  .mobileMenu {
+    display: flex;
   }
 
   .cartBtn {
