@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { sampleOrders } from '../data/products';
+import React, { useState, useEffect } from 'react';
 import styles from './Orders.module.css';
+import { getOrders } from '../services/api';
 
 const SUPPORT_EMAIL    = process.env.REACT_APP_SUPPORT_EMAIL    || 'support@buildmart.ng';
 const SUPPORT_WHATSAPP = process.env.REACT_APP_SUPPORT_WHATSAPP || '+2348012345678';
@@ -185,8 +185,38 @@ function OrderCard({ o }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 function Orders() {
-  const delivered  = sampleOrders.filter(o => o.status === 'Delivered').length;
-  const inProgress = sampleOrders.length - delivered;
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const res = await getOrders();
+        const orderData = res?.data || [];
+        setOrders(orderData);
+      } catch (err) {
+        console.error('Failed to load orders:', err);
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadOrders();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.pageHead}>
+          <h2 className={styles.pageTitle}>📦 My Orders</h2>
+        </div>
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>Loading orders...</div>
+      </div>
+    );
+  }
+
+  const delivered  = orders.filter(o => o.status === 'Delivered').length;
+  const inProgress = orders.length - delivered;
 
   return (
     <div className={styles.wrapper}>
@@ -195,7 +225,7 @@ function Orders() {
         <div>
           <h2 className={styles.pageTitle}>📦 My Orders</h2>
           <p className={styles.pageSub}>
-            {sampleOrders.length} total orders · {inProgress} in progress · {delivered} delivered
+            {orders.length} total orders · {inProgress} in progress · {delivered} delivered
           </p>
         </div>
       </div>
@@ -206,7 +236,13 @@ function Orders() {
       </div>
 
       <div className={styles.orderList}>
-        {sampleOrders.map(o => <OrderCard key={o.id} o={o} />)}
+        {orders.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
+            No orders yet. Start shopping!
+          </div>
+        ) : (
+          orders.map(o => <OrderCard key={o.id} o={o} />)
+        )}
       </div>
     </div>
   );
