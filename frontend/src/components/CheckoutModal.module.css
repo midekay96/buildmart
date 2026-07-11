@@ -314,27 +314,27 @@
     max-width: 100%;
     width: 100%;
     margin: 0 0.5rem;
-    max-height: 90vh;
+    max-height: 95vh;
   }
 
   .header {
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
   }
 
   .headerTitle {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .closeBtn {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
   }
 
   .stepper {
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.8rem;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
   .stepWrap {
@@ -439,38 +439,33 @@
   }
 
   .cardPreview {
-    padding: 0.5rem;
-    margin-bottom: 0.4rem;
-    min-height: auto;
+    display: none;
   }
 
   .cardPreviewTop {
-    margin-bottom: 0.4rem;
-    font-size: 14px;
+    display: none;
   }
 
   .cardNumber {
-    font-size: 11px;
-    letter-spacing: 1px;
-    margin-bottom: 0.3rem;
+    display: none;
   }
 
   .cardFieldLabel {
-    font-size: 7px;
-    margin-bottom: 1px;
+    display: none;
   }
 
   .cardFieldVal {
-    font-size: 10px;
+    display: none;
   }
 
   .cardBottom {
-    gap: 8px;
+    display: none;
   }
 
   .secureBadge {
     font-size: 9px;
     margin-top: 4px;
+    margin-bottom: 0.5rem;
   }
 
   .transferInfo {
@@ -505,19 +500,21 @@
 
   .ussdGrid {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 3px;
+    margin-bottom: 8px;
   }
 
   .ussdCard {
-    padding: 8px;
+    padding: 5px 8px;
   }
 
   .ussdBank {
-    font-size: 11px;
+    font-size: 10px;
+    margin-bottom: 1px;
   }
 
   .ussdCode {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .orderItems {
