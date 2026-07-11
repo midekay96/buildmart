@@ -46,8 +46,8 @@ function DashboardPage({ setActivePage }) {
               <tr key={o.id}>
                 <td>{o.id}</td>
                 <td>{o.customer}</td>
-                <td>{o.items}</td>
-                <td className={styles.mono}>₦{o.amount}</td>
+                <td>{o.items?.map(i => i.name || i.productName).join(', ') || 'N/A'}</td>
+                <td className={styles.mono}>₦{o.total || o.amount}</td>
                 <td><StatusBadge status={o.status} /></td>
                 <td>{o.date}</td>
                 <td><button className={styles.actionBtn}>View</button></td>

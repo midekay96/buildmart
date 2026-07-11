@@ -4,6 +4,10 @@ import { initiatePayment, verifyPayment, placeOrder } from '../services/api';
 
 const IS_LIVE = Boolean(process.env.REACT_APP_API_URL);
 
+console.log('🔧 DEBUG: REACT_APP_PAYSTACK_PUBLIC_KEY =', process.env.REACT_APP_PAYSTACK_PUBLIC_KEY ? '***' + process.env.REACT_APP_PAYSTACK_PUBLIC_KEY.slice(-8) : 'UNDEFINED');
+console.log('🔧 DEBUG: IS_LIVE =', IS_LIVE);
+console.log('🔧 DEBUG: PaystackPop available?', Boolean(window.PaystackPop));
+
 const STEPS = ['Delivery', 'Payment', 'Confirm'];
 
 function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
@@ -11,7 +15,7 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
   const [payMethod, setPayMethod] = useState('card');
   const [cardForm, setCardForm] = useState({ name: '', number: '', expiry: '', cvv: '' });
   const [transferDone, setTransferDone] = useState(false);
-  const [delivery,      setDelivery]      = useState({ name: '', phone: '', address: '', state: 'Lagos', note: '' });
+  const [delivery,      setDelivery]      = useState({ name: '', email: '', phone: '', address: '', state: 'Lagos', note: '' });
   const [deliveryOpt,   setDeliveryOpt]   = useState('standard');
   const [loading,       setLoading]       = useState(false);
   const [paid,          setPaid]          = useState(false);
@@ -30,9 +34,11 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
   };
 
   const handlePay = async () => {
+    console.log('🔘 Pay button clicked, IS_LIVE =', IS_LIVE);
     setLoading(true);
     try {
       if (IS_LIVE) {
+        console.log('💳 Initiating Paystack payment...');
         // ── LIVE: use Paystack ────────────────────────────────────────────
         const initRes = await initiatePayment({
           amount:   totalAmount,
@@ -44,6 +50,7 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
             deliveryOption: deliveryOpt,
           }
         });
+        console.log('✅ Paystack reference received:', initRes.reference);
 
         if (!initRes.success) throw new Error('Payment initiation failed');
 
@@ -60,26 +67,62 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
           currency:  'NGN',
           ref:       initRes.reference,
           onSuccess: async (txn) => {
-            const vRes = await verifyPayment(txn.reference);
-            if (vRes.paid) {
-              await placeOrder({
-                items:             cart,
-                delivery,
-                deliveryOption:    deliveryOpt,
-                total:             totalAmount,
-                paymentReference:  txn.reference
-              });
+            try {
+              console.log('✅ Paystack payment success:', txn.reference);
+              const vRes = await verifyPayment(txn.reference);
+              console.log('✅ Payment verified:', vRes);
+              if (vRes.paid) {
+                console.log('🔄 Creating order...');
+                const orderRes = await placeOrder({
+                  items:             cart,
+                  delivery,
+                  deliveryOption:    deliveryOpt,
+                  total:             totalAmount,
+                  paymentReference:  txn.reference
+                });
+                console.log('✅ Order created:', orderRes);
+                setLoading(false);
+                setPaid(true);
+              } else {
+                setLoading(false);
+                alert('Payment verification failed. Please contact support.');
+              }
+            } catch (err) {
+              console.error('❌ Payment callback error:', err);
               setLoading(false);
-              setPaid(true);
-            } else {
-              setLoading(false);
-              alert('Payment verification failed. Please contact support.');
+              alert('Error completing order: ' + (err.message || 'Unknown error'));
             }
           },
           onCancel: () => {
             setLoading(false);
           }
         });
+        console.log('🔐 Paystack handler created, opening iframe...');
+
+        // Workaround: if onSuccess doesn't fire in 10 seconds, verify payment manually
+        const paymentTimeout = setTimeout(() => {
+          console.warn('⚠️ Paystack callback timeout, verifying payment manually...');
+          (async () => {
+            try {
+              const vRes = await verifyPayment(initRes.reference);
+              console.log('✅ Manual payment verification:', vRes);
+              if (vRes.paid) {
+                await placeOrder({
+                  items: cart,
+                  delivery,
+                  deliveryOption: deliveryOpt,
+                  total: totalAmount,
+                  paymentReference: initRes.reference
+                });
+                setLoading(false);
+                setPaid(true);
+              }
+            } catch (err) {
+              console.error('❌ Manual verification failed:', err);
+            }
+          })();
+        }, 10000);
+
         handler.openIframe();
       } else {
         // ── MOCK: simulate 2 second payment ──────────────────────────────
@@ -145,6 +188,9 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
                 <input className={styles.fInput} placeholder="08012345678" value={delivery.phone} onChange={e => setDel('phone', e.target.value)} />
               </label>
             </div>
+            <label className={styles.fLabel}>Email Address
+              <input className={styles.fInput} type="email" placeholder="chidi@example.com" value={delivery.email} onChange={e => setDel('email', e.target.value)} />
+            </label>
             <label className={styles.fLabel}>Delivery Address
               <input className={styles.fInput} placeholder="12 Bode Thomas Street, Surulere" value={delivery.address} onChange={e => setDel('address', e.target.value)} />
             </label>
@@ -180,7 +226,7 @@ function CheckoutModal({ cart, grand, vat, subtotal, onClose, onSuccess }) {
                 <div className={styles.delOptPrice}>₦15,000</div>
               </div>
             </div>
-            <button className={styles.nextBtn} disabled={!delivery.name || !delivery.phone || !delivery.address} onClick={() => setStep(1)}>
+            <button className={styles.nextBtn} disabled={!delivery.name || !delivery.email || !delivery.phone || !delivery.address} onClick={() => setStep(1)}>
               Continue to Payment →
             </button>
           </div>
