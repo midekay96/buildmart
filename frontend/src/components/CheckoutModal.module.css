@@ -356,18 +356,18 @@
   }
 
   .body {
-    padding: 1rem;
+    padding: 0.75rem;
   }
 
   .sectionTitle {
-    font-size: 13px;
-    margin-bottom: 0.75rem;
+    font-size: 12px;
+    margin-bottom: 0.5rem;
   }
 
   .formGrid {
     grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 6px;
+    margin-bottom: 6px;
   }
 
   .spanFull {
@@ -375,13 +375,13 @@
   }
 
   .fLabel {
-    gap: 4px;
-    font-size: 11px;
-    margin-bottom: 10px;
+    gap: 3px;
+    font-size: 10px;
+    margin-bottom: 6px;
   }
 
   .fInput, .fSelect {
-    padding: 8px 10px;
+    padding: 7px 10px;
     font-size: 12px;
   }
 
@@ -413,16 +413,17 @@
 
   .methodTabs {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 4px;
+    margin-bottom: 0.6rem;
   }
 
   .methodTab {
-    gap: 8px;
-    padding: 8px 10px;
+    gap: 6px;
+    padding: 7px 10px;
   }
 
   .methodIcon {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .methodName {
@@ -430,11 +431,11 @@
   }
 
   .methodSub {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .payPanel {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
   }
 
   .cardPreview {
