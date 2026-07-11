@@ -6,7 +6,6 @@ const tabs = [
   { id: 'shop',      label: 'Shop' },
   { id: 'estimator', label: 'Estimator' },
   { id: 'orders',    label: 'Orders' },
-  { id: 'suppliers', label: 'Suppliers' },
 ];
 
 function Navbar({ activeTab, setActiveTab, cartCount }) {

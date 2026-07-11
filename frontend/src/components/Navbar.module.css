@@ -124,7 +124,16 @@
   }
 
   .links {
-    display: none;
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .link {
+    font-size: 11px;
+    padding: 4px 0;
+    white-space: nowrap;
   }
 
   .cartBtn {
