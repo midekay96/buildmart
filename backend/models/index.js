@@ -31,8 +31,8 @@ User.hasMany(Order, { foreignKey: 'userId', as: 'orders' });
 Order.belongsTo(User, { foreignKey: 'userId' });
 Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'items', onDelete: 'CASCADE' });
 OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
-OrderItem.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(OrderItem, { foreignKey: 'productId' });
+OrderItem.belongsTo(Product, { foreignKey: 'productId', constraints: false });
+Product.hasMany(OrderItem, { foreignKey: 'productId', constraints: false });
 
 // Transactions → Orders
 Transaction.belongsTo(Order, { foreignKey: 'orderId' });

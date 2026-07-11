@@ -10,7 +10,7 @@ router.get('/', asyncHandler(async (req, res) => {
   const { cat, q, sort } = req.query;
   const where = { isActive: true };
   if (cat) where.cat = cat;
-  if (q)   where.name = { [Op.iLike]:  };
+  if (q)   where.name = { [Op.iLike]: `%${q}%` };
   let order = [['id', 'ASC']];
   if (sort === 'price_asc')  order = [['price', 'ASC']];
   if (sort === 'price_desc') order = [['price', 'DESC']];

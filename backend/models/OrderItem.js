@@ -13,7 +13,7 @@ const OrderItem = sequelize.define('OrderItem', {
   },
   productId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true  // product may not exist in DB (snapshot order)
   },
   quantity: {
     type: DataTypes.INTEGER,

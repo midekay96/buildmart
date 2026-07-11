@@ -10,7 +10,6 @@ const Transaction = sequelize.define('Transaction', {
   reference: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     comment: 'Paystack payment reference'
   },
   orderId: {

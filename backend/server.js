@@ -74,11 +74,11 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('✓ PostgreSQL connected');
 
-    // sync({ alter: true }) in dev so new columns are added automatically
+    // Use force: true to completely recreate schema (fixes constraint issues in dev)
     // In production use proper migrations
     const syncMode = process.env.NODE_ENV === 'production'
       ? { alter: false }
-      : { alter: true };
+      : { force: true };
 
     await sequelize.sync(syncMode);
     console.log('✓ Database models synced');

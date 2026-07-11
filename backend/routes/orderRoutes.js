@@ -18,7 +18,7 @@ router.post('/', asyncHandler(async (req, res) => {
   const totalAmount = subtotal + tax + shippingCost;
   const order = await Order.create({
     orderNumber,
-    userId: '00000000-0000-0000-0000-000000000000', // placeholder until customer auth
+    userId: null, // guest order (no user login required)
     totalAmount,
     tax,
     shippingCost,
